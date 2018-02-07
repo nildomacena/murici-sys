@@ -1,0 +1,25 @@
+<ul id="dropdown-servidores" class="dropdown-content">
+  <li><a (click)="onNavigate('cadastro-servidor')" >Cadastro</a></li>
+  <li><a (click)="onNavigate('login/:signup')" >Cadastro de Usuário</a></li>
+  <li><a (click)="onNavigate('consulta-servidor')" >Consulta</a></li>
+</ul>
+
+<nav>
+  <div class="nav-wrapper">
+    <a href="" class="brand-logo">Agendamento</a>
+    <ul class="right">
+      <!--
+      <li><a (click)="onNavigate('agendamento')" >Solicitar agendamento</a></li>
+      <li><a (click)="onNavigate()" *ngIf="user_info.administrador">Cadastrar servidor</a></li>
+      <li><a (click)="onNavigate('login/:signup')" *ngIf="user_info.administrador">Criar usuário</a></li>
+      <li><a (click)="onNavigate('consulta-servidor')" *ngIf="user_info.administrador">Consulta servidores</a></li>
+      <li><a (click)="onNavigate('cadastro-veiculos')" *ngIf="user_info.administrador">Veículos</a></li>-->
+      <li><a (click)="sair()" >Sair</a></li>
+    </ul>
+    <!--<ul class="right">
+      <li><a data-activates="dropdown-servidores" class="dropdown-button">Servidores<i class="material-icons right" *ngIf="user_info.administrador">arrow_drop_down</i></a></li>
+      <li><a (click)="onNavigate('cadastro-veiculos')"  *ngIf="user_info.administrador"> Veículos</a></li>
+      
+    </ul>-->
+  </div>
+</nav>

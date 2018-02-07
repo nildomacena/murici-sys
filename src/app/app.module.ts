@@ -1,18 +1,48 @@
+import { FireService } from './services/fire.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database'
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
+import { EstabelecimentoComponent } from './estabelecimento/estabelecimento.component';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './app.routes';
+import { HeaderComponent } from './header/header.component';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBYUNHsD_X4yxr60N9Vjgb2kZSEQA3-Egs",
+  authDomain: "tradegames-2dff6.firebaseapp.com",
+  databaseURL: "https://tradegames-2dff6.firebaseio.com",
+  projectId: "tradegames-2dff6",
+  storageBucket: "tradegames-2dff6.appspot.com",
+  messagingSenderId: "374168288805"
+};
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    EstabelecimentoComponent,
+    HeaderComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    ReactiveFormsModule,
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [
+    FireService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

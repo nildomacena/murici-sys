@@ -1,0 +1,86 @@
+<div class="row">
+  <div class="col m4 offset-m4 s6 offset-s3">
+    <h2 class="center-align">{{signup? 'Cadastrar usuário': 'Login'}}</h2>
+  </div>
+</div>
+
+
+<div class="row">
+  <form [formGroup]="form" class="col m4 offset-m4 s6" (ngSubmit)="login()" >
+    <div class="row">
+      <div class="col s12 input-field">
+        <input type="text" autofocus id="email" name="email" class="validate" formControlName="email" >
+        <label for="email">Digite o email</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 input-field">
+        <input type="password" id="senha" class="validate" formControlName="senha" >
+        <label for="senha">Digite sua senha</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s6 offset-s3">
+        <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="form.invalid"  >Login</button>
+        <br><br>
+        <div class="center-align">
+          <a style="cursor: pointer" (click)="esqueceuSenha()">Esqueci a senha</a> 
+        </div>
+        <br>
+        <div class="center-align">
+          <a style="cursor: pointer" (click)="solicitarAcesso()" >Solicitar acesso</a> 
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="modalSignup" class="modal">
+  <div class="modal-content">
+    <h4>Solicitar acesso</h4>
+    <div class="row">
+      <div class="col s3"></div>
+      <form [formGroup]="formSignup" class="col s6" (ngSubmit)="cadastrar()" >
+        <div class="row">
+          <div class="col s12 input-field">
+            <input type="text" id="nome" name="nome" class="validate" formControlName="nome" >
+            <label for="nome">Nome</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 input-field">
+            <input type="text" id="nomeEstabelecimento" name="nomeEstabelecimento" class="validate" formControlName="nomeEstabelecimento" >
+            <label for="nomeEstabelecimento">Nome do estabelecimento</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 input-field">
+            <input type="text" id="emailSignup" name="emailSignup" class="validate" formControlName="emailSignup" >
+            <label for="emailSignup">Email</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 input-field">
+            <input type="password" id="senhaSignup" class="validate" formControlName="senhaSignup" >
+            <label for="senhaSignup">Digite sua senha</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 input-field">
+            <input type="password" id="confirmaSenhaSignup" class="validate" formControlName="confirmaSenhaSignup" >
+            <label for="confirmaSenhaSignup">Confirme a senha</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s8 offset-s2">
+            <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="formSignup.invalid || (formSignup.controls.senhaSignup.value != formSignup.controls.confirmaSenhaSignup.value)">Cadastrar</button>
+          </div>
+        </div>
+        <div class="center-align">
+          <a href="" (click)="solicitarAcesso()" >Fazer login</a> 
+        </div>
+      </form>
+      <div class="col s3"></div>
+    </div>
+  </div>
+</div>

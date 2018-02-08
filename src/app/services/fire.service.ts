@@ -4,13 +4,17 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database/interfaces';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/first';
-
+import * as firebase from 'firebase';
 
 @Injectable()
 export class FireService {
+  providerNewUser: any;
 
   constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
-
+    firebase.auth().getRedirectResult().then(result => {
+      console.log(result);
+      
+    })
    }
 
   getCategorias():Promise<any>{
@@ -39,20 +43,23 @@ export class FireService {
     return novaLista;
   }
 
-  cadastrarUsuario(cadastro: any){
-    this.afAuth.auth.fetchProvidersForEmail(cadastro.emailSignup)
+  cadastrarUsuario(cadastro: any):Promise<any>{
+    return this.afAuth.auth.fetchProvidersForEmail(cadastro.emailSignup)
       .then(result => {
         console.log(result);
         if(result.length > 0){
-          this.afAuth.auth.
+          alert('Como você já tem uma conta criada com o login do Facebook, é necessário que faça o login nesse site para continuar.');
+          this.providerNewUser = firebase.auth.EmailAuthProvider.credential(cadastro.emailSignup, cadastro.senhaSignup);
+          this.afAuth.auth.signInWithRedirect()
+            .then(resultSignIn => {
+              console.log(resultSignIn);
+            })
+          firebase.auth()
         }
-      })
-    this.afAuth.auth.createUserWithEmailAndPassword(cadastro.emailSignup, cadastro.senhaSignup)
-      .then(result => {
-        console.log(result)
-      })
-      .catch(err => {
-        console.error(err);
+
+        else{
+          return this.afAuth.auth.createUserWithEmailAndPassword(cadastro.emailSignup, cadastro.senhaSignup)
+        }
       })
   
   }

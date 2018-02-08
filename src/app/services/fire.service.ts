@@ -9,13 +9,8 @@ import * as firebase from 'firebase';
 @Injectable()
 export class FireService {
   providerNewUser: any;
-
   constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
-    firebase.auth().getRedirectResult().then(result => {
-      console.log(result);
-      
-    })
-   }
+  }
 
   getCategorias():Promise<any>{
     return this.db.list('categorias').snapshotChanges().first().toPromise()
@@ -43,18 +38,23 @@ export class FireService {
     return novaLista;
   }
 
+  facebook(){
+    this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      .then(result => {
+        console.log(result);
+      })
+  }
+  
   cadastrarUsuario(cadastro: any):Promise<any>{
     return this.afAuth.auth.fetchProvidersForEmail(cadastro.emailSignup)
       .then(result => {
-        console.log(result);
-        if(result.length > 0){
-          alert('Como você já tem uma conta criada com o login do Facebook, é necessário que faça o login nesse site para continuar.');
+        if(result.length > 0 && result[0] == 'facebook.com'){
+          alert('Como você já tem uma conta criada com o login do Facebook, é necessário que faça o login nesse site para continuar.\nLibere as popups para fazer login com o Facebook ou use um email diferente.');
           this.providerNewUser = firebase.auth.EmailAuthProvider.credential(cadastro.emailSignup, cadastro.senhaSignup);
-          this.afAuth.auth.signInWithRedirect()
+          return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
             .then(resultSignIn => {
-              console.log(resultSignIn);
+              return this.afAuth.auth.currentUser.linkWithCredential(this.providerNewUser);
             })
-          firebase.auth()
         }
 
         else{
@@ -62,5 +62,22 @@ export class FireService {
         }
       })
   
+  }
+
+  salvarDadosUsuário(cadastro: any){
+    return this.db.list('estabelecimentos').push({
+      categoria: cadastro.categoria, 
+      nome: cadastro.nomeEstabelecimento,
+      ativo: false,
+      nomeResponsavel: cadastro.nome,
+      uid: this.afAuth.auth.currentUser.uid,
+    });
+  }
+
+  login(user){
+    return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.senha);
+  }
+  logout(){
+    this.afAuth.auth.signOut();
   }
 }

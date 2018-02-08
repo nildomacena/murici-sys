@@ -14,7 +14,7 @@
       <li><a (click)="onNavigate('login/:signup')" *ngIf="user_info.administrador">Criar usuário</a></li>
       <li><a (click)="onNavigate('consulta-servidor')" *ngIf="user_info.administrador">Consulta servidores</a></li>
       <li><a (click)="onNavigate('cadastro-veiculos')" *ngIf="user_info.administrador">Veículos</a></li>-->
-      <li><a (click)="sair()" >Sair</a></li>
+      <li><a *ngIf="user" (click)="sair()" >Sair</a></li>
     </ul>
     <!--<ul class="right">
       <li><a data-activates="dropdown-servidores" class="dropdown-button">Servidores<i class="material-icons right" *ngIf="user_info.administrador">arrow_drop_down</i></a></li>

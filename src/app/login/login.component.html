@@ -4,9 +4,9 @@
   </div>
 </div>
 
-
+<ng4-loading-spinner  [threshold]="2000" [template]="template" [loadingText]="'Carregando...'" [zIndex]="9999"> </ng4-loading-spinner>
 <div class="row">
-  <form [formGroup]="form" class="col m4 offset-m4 s6" (ngSubmit)="login()" >
+  <form [formGroup]="form" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()" >
     <div class="row">
       <div class="col s12 input-field">
         <input type="text" autofocus id="email" name="email" class="validate" formControlName="email" >
@@ -40,7 +40,7 @@
     <h4>Solicitar acesso</h4>
     <div class="row">
       <div class="col s3"></div>
-      <form [formGroup]="formSignup" class="col s6" (ngSubmit)="cadastrar()" >
+      <form [formGroup]="formSignup" class="col s8" (ngSubmit)="cadastrar()" >
         <div class="row">
           <div class="col s12 input-field">
             <input type="text" id="nome" name="nome" class="validate" formControlName="nome" >
@@ -49,14 +49,23 @@
         </div>
         <div class="row">
           <div class="col s12 input-field">
-            <input type="text" id="nomeEstabelecimento" name="nomeEstabelecimento" class="validate" formControlName="nomeEstabelecimento" >
-            <label for="nomeEstabelecimento">Nome do estabelecimento</label>
+            <input type="text" id="emailSignup" name="emailSignup" class="validate" formControlName="emailSignup" >
+            <label for="emailSignup">Email</label>
           </div>
         </div>
         <div class="row">
           <div class="col s12 input-field">
-            <input type="text" id="emailSignup" name="emailSignup" class="validate" formControlName="emailSignup" >
-            <label for="emailSignup">Email</label>
+            <input type="text" id="nomeEstabelecimento" name="nomeEstabelecimento" class="validate" formControlName="nomeEstabelecimento" >
+            <label for="nomeEstabelecimento">Nome do estabelecimento</label>
+          </div>
+        </div>
+        <div class="row" *ngIf="categorias?.length > 0" >
+          <div class="col s12">
+            <label>Veículo</label>
+            <select class="browser-default" formControlName="categoria" >
+              <option value="" disabled selected>Qual a categoria do estabelecimento</option>
+              <option *ngFor="let categoria of categorias" [value]="categoria.key">{{categoria.nome}}</option>
+            </select>
           </div>
         </div>
         <div class="row">

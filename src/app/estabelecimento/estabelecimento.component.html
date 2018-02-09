@@ -1,3 +1,154 @@
-<p>
-  estabelecimento works!
-</p>
+<div class="row container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="col s12">
+    <h3 class="center-align">Informações Gerais</h3>
+    <br>
+    <div class="row">
+      <div class="input-field col s12 m6">
+        <input id="nome" formControlName="nome" type="text" class="validate">
+        <label for="nome">Nome do Estabelecimento</label>
+      </div>
+      <div class="input-field col s12 m6">
+        <input id="nomeResponsavel" formControlName="nomeResponsavel" type="text" class="validate">
+        <label for="nomeResponsavel">Nome do Responsável</label>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea id="descricao" formControlName="descricao" class="materialize-textarea"></textarea>
+        <label for="descricao">Digite uma descrição para sua empresa</label>
+      </div>
+    </div>
+    <div class="row">
+      <h5>Telefones</h5>
+      <div class="input-field col s12 m6">
+        <input id="telefonePrimario" type="text" class="validate">
+        <label for="telefonePrimario">Telefone Primário</label>
+      </div>
+      <div class="input-field col s12 m6">
+        <input id="telefoneSecundario" type="text" class="validate">
+        <label for="telefoneSecundario">Telefone Secundário</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="logradouro" type="text" class="validate">
+        <label for="logradouro">Digite o endereço da sua empresa</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input type="checkbox" id="domingo_check" />
+            <label for="domingo_check">Domingo</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="domingo_input" type="text" class="validate">
+            <label for="domingo_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input class="left" type="checkbox" id="segunda_check" />
+            <label for="segunda_check">Segunda-feira</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="segunda_input" type="text" class="validate">
+            <label for="segunda_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input type="checkbox" id="terca_check" />
+            <label for="terca_check">Terça-feira</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="terca_input" type="text" class="validate">
+            <label for="terca_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input class="left" type="checkbox" id="quarta_check" />
+            <label for="quarta_check">Quarta-feira</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="quarta_input" type="text" class="validate">
+            <label for="quarta_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input type="checkbox" id="quinta_check" />
+            <label for="quinta_check">Quinta-feira</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="quinta_input" type="text" class="validate">
+            <label for="quinta_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input class="left" type="checkbox" id="sexta_check" />
+            <label for="sexta_check">Sexta-feira</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="sexta_input" type="text" class="validate">
+            <label for="sexta_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input type="checkbox" id="sabado_check" />
+            <label for="sabado_check">Sábado</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="sabado_input" type="text" class="validate">
+            <label for="sabado_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 l6">
+        <div class="row valign-wrapper">
+          <div class="col s6 l4 m4">
+            <input class="left" type="checkbox" id="feriado_check" />
+            <label for="feriado_check">Feriado</label>
+          </div>
+          <div class="col s6 l8 m8 input-field">
+            <input id="feriado_input" type="text" class="validate">
+            <label for="feriado_input">Horário de funcionamento</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <input type="submit" class="btn btn-waves col s12 m4 offset-m4 offset-l5 l2">
+    </div>
+  </form>
+</div>

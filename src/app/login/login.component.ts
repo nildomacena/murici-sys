@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       this.spinnerService.hide();
       if(this.fire.afAuth.auth.currentUser)
         this.router.navigate(['estabelecimento']);
-    }, 500);
+    }, 1000);
 
     this.fire.getCategorias()
       .then(categorias => {

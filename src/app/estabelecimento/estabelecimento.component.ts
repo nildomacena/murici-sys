@@ -61,7 +61,8 @@ export class EstabelecimentoComponent implements OnInit {
     let horario:FormGroup = <FormGroup>this.form.controls['horario'];
     console.log(horario);
     Object.keys(horario.controls).map(key => {
-      horario.controls[key].controls['descricao'].disable();
+      let aux_control = <FormGroup>horario.controls[key];
+      aux_control.controls['descricao'].disable();
     })
   }
 
@@ -70,10 +71,17 @@ export class EstabelecimentoComponent implements OnInit {
   }
 
   onChangeDia(event:any, dia:string){
-    if(this.form.controls['horario'].controls[dia].value.abre)
-      <FormGroup>this.form.controls['horario'].controls[dia].controls['descricao'].enable();
-    else
-      this.form.controls['horario'].controls[dia].controls['descricao'].disable();
+    let control_horario = <FormGroup>this.form.controls['horario'];
+    if(control_horario.controls[dia].value.abre){
+      let control:FormGroup = <FormGroup>this.form.controls['horario'];
+      let control_aux = <FormGroup>control.controls[dia];
+      control_aux.controls['descricao'].enable();
+    }
+    else{
+      let control:FormGroup = <FormGroup>this.form.controls['horario'];
+      let control_aux = <FormGroup>control.controls[dia];
+      control_aux.controls['descricao'].disable();
+    }
   }
 
 }

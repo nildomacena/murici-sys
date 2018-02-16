@@ -5,4 +5,10 @@
     .imagem-adicional{
         top:120px;
     }
+    agm-map {
+        height: 500px;
+    }
+    .modal{
+        
+    }
 }

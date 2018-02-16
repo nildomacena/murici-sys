@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database'
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database/interfaces';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/first';
@@ -9,9 +10,25 @@ import * as firebase from 'firebase';
 @Injectable()
 export class FireService {
   providerNewUser: any;
-  constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
+  estabelecimento: any;
+  
+  constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth, public storage: AngularFireStorage ) {
+    this.afAuth.authState.subscribe(user => {
+      if(user.uid)
+        this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(user.uid))
+          .snapshotChanges().first().toPromise().then((result => {
+            this.estabelecimento = this.snapshotParaValue(result)[0];
+            console.log(this.estabelecimento);
+          }))
+    })
   }
 
+  getEstabelecimentoById(uid){
+    return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))
+              .snapshotChanges().first().toPromise().then(snap => {
+                return Promise.resolve(this.snapshotParaValue(snap)[0]);
+              })
+  }
   getCategorias():Promise<any>{
     return this.db.list('categorias').snapshotChanges().first().toPromise()
               .then(snap => {
@@ -72,6 +89,36 @@ export class FireService {
       nomeResponsavel: cadastro.nome,
       uid: this.afAuth.auth.currentUser.uid,
     });
+  }
+
+  salvarImagens(avatar, imagemAdicional?):Promise<any>{
+    let urlAvatar: string;
+    let urlAdicional: string;
+
+    if(imagemAdicional && avatar){
+      return this.storage.ref(this.estabelecimento.key+'/avatar.jpg').put(avatar)
+        .then(resultAvatar => {
+          console.log(resultAvatar);
+          urlAvatar = resultAvatar.downloadURL;
+          return this.storage.ref(this.estabelecimento.key+'/imagemAdicional.jpg').put(imagemAdicional)
+            .then(resultAdicional => {
+              urlAdicional = resultAdicional.downloadURL;
+              return this.db.object(`estabelecimentos/${this.estabelecimento.key}`).update({avatar: urlAvatar, imagemAdicional: urlAdicional});
+            })
+        })
+    }
+    else if(avatar)
+      return this.storage.ref(this.estabelecimento.key+'/avatar.jpg').put(avatar)
+        .then(result => {
+          console.log(result);
+          return this.db.object(`estabelecimentos/${this.estabelecimento.key}`).update({avatar: result.downloadURL});
+        })
+    else if(imagemAdicional)
+      return this.storage.ref(this.estabelecimento.key+'/imagemAdicional.jpg').put(imagemAdicional)
+        .then(result => {
+          console.log(result);
+          return this.db.object(`estabelecimentos/${this.estabelecimento.key}`).update({imagemAdicional: result.downloadURL});
+        })
   }
 
   login(user){

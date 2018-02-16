@@ -7,6 +7,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database'
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 import { LoadingModule } from 'ngx-loading';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
@@ -16,6 +17,7 @@ import { EstabelecimentoComponent } from './estabelecimento/estabelecimento.comp
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { HeaderComponent } from './header/header.component';
+import { AgmCoreModule } from '@agm/core';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBYUNHsD_X4yxr60N9Vjgb2kZSEQA3-Egs",
@@ -41,8 +43,12 @@ const firebaseConfig = {
     ReactiveFormsModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFireStorageModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDo1gpDFlYJzEus8c2b3aumXH8weD7YKyM'
+    })
   ],
   providers: [
     FireService

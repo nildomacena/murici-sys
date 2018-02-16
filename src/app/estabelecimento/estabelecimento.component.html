@@ -30,11 +30,11 @@
       <div class="row">
         <h5>Telefones</h5>
         <div class="input-field col s12 m6">
-          <input id="telefonePrimario" type="text" class="validate">
+          <input id="telefonePrimario" formControlName="telefonePrimario" type="text" class="validate">
           <label for="telefonePrimario">Telefone Primário</label>
         </div>
         <div class="input-field col s12 m6">
-          <input id="telefoneSecundario" type="text" class="validate">
+          <input id="telefoneSecundario" formControlName="telefoneSecundario" type="text" class="validate">
           <label for="telefoneSecundario">Telefone Secundário</label>
         </div>
       </div>
@@ -43,6 +43,11 @@
           <input id="logradouro" type="text" class="validate">
           <label for="logradouro">Digite o endereço da sua empresa</label>
         </div>
+      </div>
+      <div class="row">
+        <button class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4" (click)="abrirModal()" >
+          <i class="material-icons left">map</i>Localização no Mapa
+        </button>
       </div>
       <div formGroupName="horario" >
         <div class="row">
@@ -157,21 +162,22 @@
         </div>
       </div>
       <div class="row">
-        <input type="submit" class="btn btn-waves col s12 m4 offset-m4 offset-l5 l2">
+        <input type="submit" [disabled]="this.form.invalid" class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4">
       </div>
     </form>
   </div>
 </div>
 
 <div id="test2" class="col s12 container">
+    <ng4-loading-spinner  [threshold]="2000" [template]="template" [loadingText]="'Carregando...'" [zIndex]="9999"> </ng4-loading-spinner>
     <h3 class="center-align">Imagens</h3>
     <br>
   <div class="row">
-    <img class="col m3 s12" src="assets/imgs/marios.jpg">
+    <img class="col m3 s12" [src]="estabelecimento?.avatar">
     <div class="file-field input-field col m9 s12">
       <div class="btn">
         <span>imagem</span>
-        <input type="file">
+        <input type="file" (change)="uploadFile($event, 'avatar')">
       </div>
       <div class="file-path-wrapper">
         <input class="file-path validate" type="text">
@@ -180,15 +186,32 @@
   </div>
   <br><br>
   <div class="row">
-    <img src="http://static.youblisher.com/publications/135/809745/large-809745-3.jpg" class="col m3 s12" >
+    <img [src]="estabelecimento?.imagemAdicional" class="col m3 s12" >
     <div class="file-field imagem-adicional input-field col m9 s12">
       <div class="btn">
         <span>imagem adicional</span>
-        <input type="file">
+        <input type="file" (change)="uploadFile($event, 'imagemAdicional')">
       </div>
       <div class="file-path-wrapper">
         <input class="file-path validate" type="text">
       </div>
     </div>
+  </div>
+  <div class="row">
+      <button class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4" (click)="enviarImagens()" >
+        Salvar imagens&nbsp;<i class="material-icons right">send</i>
+      </button>
+  </div>
+</div>
+
+
+<div class="modal" id="modal_endereco">
+  <div id="map" class="modal-content">
+    <agm-map #agmMap [zoom]="15" [latitude]="lat" [longitude]="lng">
+      <agm-marker [latitude]="latMarker" [longitude]="lngMarker"></agm-marker>
+    </agm-map>
+  </div>
+  <div class="modal-footer">
+    <button  class="modal-action modal-close waves-effect waves-green btn-flat">Salvar</button>
   </div>
 </div>

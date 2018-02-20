@@ -14,6 +14,7 @@ export class FireService {
   
   constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth, public storage: AngularFireStorage ) {
     this.afAuth.authState.subscribe(user => {
+      console.log(user.uid);
       if(user.uid)
         this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(user.uid))
           .snapshotChanges().first().toPromise().then((result => {
@@ -80,6 +81,10 @@ export class FireService {
       })
   
   }
+  updateDDadosEstabelecimento(estabelecimento):Promise<any>{
+    console.log(estabelecimento);
+    return this.db.object(`estabelecimentos/${this.estabelecimento.key}`).update(estabelecimento);
+  }
 
   salvarDadosUsuário(cadastro: any){
     return this.db.list('estabelecimentos').push({
@@ -90,7 +95,9 @@ export class FireService {
       uid: this.afAuth.auth.currentUser.uid,
     });
   }
-
+  salvarEndereco(coords:any):Promise<any>{
+    return this.db.object(`estabelecimentos/${this.estabelecimento.key}/coords`).update(coords);
+  }
   salvarImagens(avatar, imagemAdicional?):Promise<any>{
     let urlAvatar: string;
     let urlAdicional: string;

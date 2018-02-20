@@ -6,6 +6,7 @@ import { FireService } from '../services/fire.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 declare var jQuery: any;
+declare var Materialize: any;
 
 @Component({
   selector: 'app-estabelecimento',
@@ -26,23 +27,19 @@ export class EstabelecimentoComponent implements OnInit {
   constructor(
     public fire: FireService,
     public spinnerService: Ng4LoadingSpinnerService
-  ) {
-    this.fire.afAuth.authState.subscribe(user => {
-      if(user){
-        this.user = user;
-        this.fire.getEstabelecimentoById(user.uid)
-          .then(estabelecimento => {
-            this.estabelecimento = estabelecimento;
-          })
-        console.log(user, this.estabelecimento);
-      }
-    })
+    ) {
+    this.spinnerService.show();
     this.form = new FormGroup({
       'nome': new FormControl('',[Validators.required]),
       'nomeResponsavel': new FormControl('', [Validators.required]),
       'telefonePrimario': new FormControl('', [Validators.required]),
       'telefoneSecundario': new FormControl('', [Validators.required]),
       'descricao': new FormControl('', [Validators.required]),
+      'logradouro': new FormControl('', [Validators.required]),
+      'localizacao': new FormGroup({
+        'lat': new FormControl(''),
+        'lng': new FormControl(''),
+      }),
       'horario': new FormGroup({
         'domingo': new FormGroup({
           'abre': new FormControl(false),
@@ -78,6 +75,24 @@ export class EstabelecimentoComponent implements OnInit {
         })
       })
     })
+
+    this.fire.afAuth.authState.subscribe(user => {
+      if(user){
+        this.user = user;
+        this.fire.getEstabelecimentoById(user.uid)
+          .then(estabelecimento => {
+            this.estabelecimento = estabelecimento;
+            this.form.controls['nome'].setValue(this.estabelecimento.nome);
+            this.form.controls['nomeResponsavel'].setValue(this.estabelecimento.nomeResponsavel);
+            this.estabelecimento.descricao? this.form.controls['descricao'].setValue(this.estabelecimento.descricao): '';
+            this.estabelecimento.telefonePrimario? this.form.controls['telefonePrimario'].setValue(this.estabelecimento.telefonePrimario): '';
+            this.estabelecimento.telefoneSecundario? this.form.controls['telefoneSecundario'].setValue(this.estabelecimento.telefoneSecundario): '';
+            this.estabelecimento.logradouro? this.form.controls['logradouro'].setValue(this.estabelecimento.logradouro): '';
+            Materialize.updateTextFields();
+            this.spinnerService.hide();
+          })
+      }
+    })
   }
 
   ngOnInit() {
@@ -93,13 +108,26 @@ export class EstabelecimentoComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.form.value);
+    this.spinnerService.show();
+    this.fire.updateDDadosEstabelecimento(this.form.value)
+      .then(_ => {
+        console.log('atualizado');
+        this.spinnerService.hide();
+      })
+    
+  }
+
+  salvarEndereco(){
+    this.spinnerService.show();
+    this.fire.salvarEndereco({lat:this.latMarker, lng:this.lngMarker})
+      .then(_ => {
+        this.spinnerService.hide();
+      })
   }
 
   abrirModal(){
     console.log(this.form);
     this.agmMap.mapClick.subscribe(event => {
-      console.log(event);
       this.latMarker = event.coords.lat;
       this.lngMarker = event.coords.lng;
     })
@@ -110,7 +138,7 @@ export class EstabelecimentoComponent implements OnInit {
   setMap(lat:number, lng:number, marker?:boolean){
     let map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: lat, lng: lng},
-      zoom: 18,
+      zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       
     });
@@ -140,7 +168,6 @@ export class EstabelecimentoComponent implements OnInit {
           .then(estabelecimento => {
             this.estabelecimento = estabelecimento;
           })
-        console.log(result);
       })
   
   }

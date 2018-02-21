@@ -173,7 +173,7 @@
   <h3 class="center-align">Imagens</h3>
   <br>
   <div class="row">
-    <img class="col m3 s12" [src]="estabelecimento?.avatar">
+    <img class="col m3 s12" [src]="estabelecimento?.avatar? estabelecimento?.avatar: 'assets/imgs/no-photo.png'">
     <div class="file-field input-field col m9 s12">
       <div class="btn">
         <span>imagem</span>
@@ -186,7 +186,7 @@
   </div>
   <br><br>
   <div class="row">
-    <img [src]="estabelecimento?.imagemAdicional" class="col m3 s12" >
+    <img [src]="estabelecimento?.imagemAdicional? estabelecimento?.imagemAdicional: 'assets/imgs/no-photo.png'" class="col m3 s12" >
     <div class="file-field imagem-adicional input-field col m9 s12">
       <div class="btn">
         <span>imagem adicional</span>

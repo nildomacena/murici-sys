@@ -14,7 +14,7 @@ export class FireService {
   
   constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth, public storage: AngularFireStorage ) {
     this.afAuth.authState.subscribe(user => {
-      console.log(user.uid);
+      console.log(user);
       if(user.uid)
         this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(user.uid))
           .snapshotChanges().first().toPromise().then((result => {
@@ -67,6 +67,14 @@ export class FireService {
     return this.afAuth.auth.fetchProvidersForEmail(cadastro.emailSignup)
       .then(result => {
         if(result.length > 0 && result[0] == 'facebook.com'){
+          alert('Como você já tem uma conta criada com o login do Facebook, é necessário que faça o login nesse site para continuar.\nLibere as popups para fazer login com o Facebook ou use um email diferente.');
+          this.providerNewUser = firebase.auth.EmailAuthProvider.credential(cadastro.emailSignup, cadastro.senhaSignup);
+          return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+            .then(resultSignIn => {
+              return this.afAuth.auth.currentUser.linkWithCredential(this.providerNewUser);
+            })
+        }
+        else if(result.length > 0 && result[1] == 'facebook.com'){
           alert('Como você já tem uma conta criada com o login do Facebook, é necessário que faça o login nesse site para continuar.\nLibere as popups para fazer login com o Facebook ou use um email diferente.');
           this.providerNewUser = firebase.auth.EmailAuthProvider.credential(cadastro.emailSignup, cadastro.senhaSignup);
           return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())

@@ -152,6 +152,6 @@ export class FireService {
 
 
   enviarNotificacao(corpo){
-    firebase.messaging().
+    //firebase.messaging().
   }
 }

@@ -1,7 +1,7 @@
 import { FireService } from './services/fire.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
 
 
 import { AngularFireModule } from 'angularfire2';
@@ -18,6 +18,7 @@ import { RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { HeaderComponent } from './header/header.component';
 import { AgmCoreModule } from '@agm/core';
+import { AdminComponent } from './admin/admin.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBYUNHsD_X4yxr60N9Vjgb2kZSEQA3-Egs",
@@ -34,11 +35,13 @@ const firebaseConfig = {
     AppComponent,
     LoginComponent,
     EstabelecimentoComponent,
-    HeaderComponent
+    HeaderComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
     LoadingModule,
+    FormsModule,
     Ng4LoadingSpinnerModule.forRoot(),
     ReactiveFormsModule,
     AngularFireAuthModule,

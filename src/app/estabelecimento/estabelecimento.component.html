@@ -68,8 +68,6 @@
           <div class="col s12 l6" formGroupName="segunda">
             <div class="row valign-wrapper">
               <div class="col s6 l4 m4">
-                <input class="left" type="checkbox" id="segunda_check" formControlName="abre" (change)="onChangeDia($event, 'segunda')"/>
-                <label for="segunda_check">Segunda-feira</label>
               </div>
               <div class="col s6 l8 m8 input-field">
                 <input id="segunda_input" placeholder="Ex: 08:00-18:00" type="text"formControlName="descricao" class="validate">
@@ -95,6 +93,8 @@
           <div class="col s12 l6" formGroupName="quarta">
             <div class="row valign-wrapper">
               <div class="col s6 l4 m4">
+                <input class="left" type="checkbox" id="segunda_check" formControlName="abre" (change)="onChangeDia($event, 'segunda')"/>
+                <label for="segunda_check">Segunda-feira</labe
                 <input class="left" type="checkbox" id="quarta_check" formControlName="abre" (change)="onChangeDia($event, 'quarta')"/>
                 <label for="quarta_check">Quarta-feira</label>
               </div>

@@ -1,0 +1,58 @@
+<div class="row" [hidden]="!adminLogado">
+  <div class="col s12">
+    <ul class="tabs">
+      <li class="tab col s3" ><a class="active"  href="#cadastro">Cadastro</a></li>
+      <li class="tab col s3"><a href="#notificacao">Notificações</a></li>
+      <li class="tab col s3 disabled"><a href="#test3">Disabled Tab</a></li>
+      <li class="tab col s3"><a href="#test4">Test 4</a></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <form [formGroup]="form" [hidden]="adminLogado" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()" >
+    <div class="row">
+      <div class="col s12 input-field">
+        <input type="text" autofocus id="email" name="email" class="validate" formControlName="email" >
+        <label for="email">Digite o email</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 input-field">
+        <input type="password" id="senha" class="validate" formControlName="senha" >
+        <label for="senha">Digite sua senha</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s6 offset-s3">
+        <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="form.invalid"  >Login</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="row">
+  <div class="col l4 offset-l4 m10 offset-m1 s12" id="cadastro">
+    <form [formGroup]="formCadastro" >
+      <div class="row">
+        <div class="col s12 input-field">
+          <input type="text" autofocus id="email" name="email" class="validate" formControlName="email" >
+          <label for="email">Digite o email</label>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col l4 offset-l4 m10 offset-m1 s12" id="notificacao">
+    <div class="row">
+      <div class="col s12 input-field">
+        <input type="text" [(ngModel)]="corpoNotificacao" autofocus id="notificacao_corpo" name="notificacao_corpo" class="validate">
+        <label for="notificacao_corpo">Digite o corpo da notificação</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s6 offset-s3">
+        <button (click)="enviarNotificacao()" class="btn btn-waves" style="width:100%">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

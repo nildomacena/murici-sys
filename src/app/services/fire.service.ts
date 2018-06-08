@@ -24,6 +24,13 @@ export class FireService {
     })
   }
 
+  checaAdmin(uid):Promise<any>{
+    return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))
+              .valueChanges().first().toPromise().then(value => {
+                return Promise.resolve(value[0]['admin']);
+              })
+  }
+
   getEstabelecimentoById(uid){
     return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))
               .snapshotChanges().first().toPromise().then(snap => {
@@ -141,5 +148,10 @@ export class FireService {
   }
   logout(){
     this.afAuth.auth.signOut();
+  }
+
+
+  enviarNotificacao(corpo){
+    firebase.messaging().
   }
 }

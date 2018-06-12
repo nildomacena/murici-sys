@@ -6,6 +6,9 @@ import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database/inter
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/first';
 import * as firebase from 'firebase';
+import { ThenableReference } from '@firebase/database-types';
+
+declare var Materialize: any;
 
 @Injectable()
 export class FireService {
@@ -37,6 +40,29 @@ export class FireService {
                 return Promise.resolve(this.snapshotParaValue(snap)[0]);
               })
   }
+
+  getEstabelecimentosPorCategoria(categoria){
+    return this.db.list('estabelecimentos', ref => ref.orderByChild('categoria').equalTo(categoria))
+              .snapshotChanges().first().toPromise().then(snap => {
+                console.log(snap);
+                return Promise.resolve(this.snapshotParaValue(snap));
+              })
+  }
+
+  cadastrarEstabelecimento(estabelecimento:any):Promise<any>{
+    estabelecimento['ativado'] = false;
+    return  this.db.list('estabelecimentos', ref => ref.orderByChild('email').equalTo(estabelecimento.email))
+              .valueChanges().first().toPromise().then(value => {
+                if(value.length > 0)
+                  return Promise.reject('email já cadastrado');
+                  else
+                    return this.db.list('estabelecimentos').push(estabelecimento)
+                      .then(_ => {
+                        return Promise.resolve(true);
+                      })
+              })
+  }
+
   getCategorias():Promise<any>{
     return this.db.list('categorias').snapshotChanges().first().toPromise()
               .then(snap => {
@@ -153,5 +179,10 @@ export class FireService {
 
   enviarNotificacao(corpo){
     //firebase.messaging().
+  }
+
+  
+  toast(mensagem:string, duracao?:number){
+    Materialize.toast(mensagem, 3000)
   }
 }

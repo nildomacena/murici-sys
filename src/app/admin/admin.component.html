@@ -3,12 +3,13 @@
     <ul class="tabs">
       <li class="tab col s3" ><a class="active"  href="#cadastro">Cadastro</a></li>
       <li class="tab col s3"><a href="#notificacao">Notificações</a></li>
-      <li class="tab col s3 disabled"><a href="#test3">Disabled Tab</a></li>
+      <li class="tab col s3"><a href="#lista">Lista de estabelecimentos</a></li>
       <li class="tab col s3"><a href="#test4">Test 4</a></li>
     </ul>
   </div>
 </div>
 <div class="row">
+  <!--Tela de login do admin-->
   <form [formGroup]="form" [hidden]="adminLogado" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()" >
     <div class="row">
       <div class="col s12 input-field">
@@ -29,17 +30,48 @@
     </div>
   </form>
 </div>
-<div class="row">
+
+<div class="row" *ngIf="adminLogado">
+  <!--Tab de cadastro-->
   <div class="col l4 offset-l4 m10 offset-m1 s12" id="cadastro">
-    <form [formGroup]="formCadastro" >
+    <form [formGroup]="formCadastro" (ngSubmit)="onSubmitCadastro()" >
       <div class="row">
         <div class="col s12 input-field">
-          <input type="text" autofocus id="email" name="email" class="validate" formControlName="email" >
+          <input type="email" autofocus id="email" name="email" class="validate" formControlName="email" >
           <label for="email">Digite o email</label>
         </div>
       </div>
+      <div class="row">
+        <div class="col s12 input-field">
+          <input type="text" autofocus id="nome" name="nome" class="validate" formControlName="nome" >
+          <label for="nome">Nome do estabelecimento</label>
+        </div>
+      </div>
+      <div class="row">
+        <label>Categoria</label>
+        <select class="col s12 input-field browser-default" formControlName="categoria" >
+          <option value="" disabled selected>Selecione a categoria</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria.key">{{categoria.nome}}</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <input type="checkbox" id="imagemAdicional" formControlName="imagemAdicional" />
+          <label for="imagemAdicional">Imagem Adicional?</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <input type="checkbox" id="slides" formControlName="slides" />
+          <label for="slides">Slides?</label>
+        </div>
+      </div>
+      <div class="row">
+        <input [disabled]="formCadastro.invalid" class="col s12 m8 offset-m2 l4 offset-l4 btn btn-waves" type="submit" />
+      </div>
     </form>
   </div>
+  <!--Tab de notificação-->
   <div class="col l4 offset-l4 m10 offset-m1 s12" id="notificacao">
     <div class="row">
       <div class="col s12 input-field">
@@ -50,6 +82,20 @@
     <div class="row">
       <div class="col s6 offset-s3">
         <button (click)="enviarNotificacao()" class="btn btn-waves" style="width:100%">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col l4 offset-l4 m10 offset-m1 s12" id="lista">
+    <div class="row">
+      <div class="col s12">
+        <ul class="collection">
+          <a style="cursor: pointer;" *ngFor="let categoria of categorias" (click)="selectCategoria(categoria)" class="collection-item">{{categoria.nome}}</a>
+        </ul>
+        <ul class="collection with-header">
+          <li class="collection-header"><h4>{{categoriaSelecionada?.nome}}</h4></li>
+          <li *ngFor="let estabelecimento of estabelecimentosCategoria" class="collection-item">{{estabelecimento.nome}}</li>
+        </ul>
       </div>
     </div>
   </div>

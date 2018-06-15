@@ -34,11 +34,18 @@ export class FireService {
               })
   }
 
-  getEstabelecimentoById(uid){
+  getEstabelecimentoByUid(uid){
     return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))
               .snapshotChanges().first().toPromise().then(snap => {
                 return Promise.resolve(this.snapshotParaValue(snap)[0]);
               })
+  }
+
+  getEstabelecimentoByKey(key){
+    return this.db.object(`estabelecimentos/${key}`)
+      .snapshotChanges().first().toPromise().then(estabelecimento => {
+        return Promise.resolve(this.snapshotParaValue(estabelecimento));
+      })
   }
 
   getEstabelecimentosPorCategoria(categoria){
@@ -75,18 +82,40 @@ export class FireService {
       })*/
   }
 
-  snapshotParaValue(lista: AngularFireAction<DatabaseSnapshot>[]){
+  snapshotParaValue(snapshot):any{
     let novaLista = [];
-    lista.map(objeto => {
-      let novoObjeto = {};
-      novoObjeto['key'] = objeto.key;
-      let val = objeto.payload.val();
-      Object.keys(val).map(key => {
-        novoObjeto[key] = val[key]
+    if(snapshot.length > 0){
+      snapshot.map(objeto => {
+        let novoObjeto = {};
+        novoObjeto['key'] = objeto.key;
+        let val = objeto.payload.val();
+        Object.keys(val).map(key => {
+          novoObjeto[key] = val[key]
+        });
+        novaLista.push(novoObjeto);
       });
-      novaLista.push(novoObjeto);
-    });
-    return novaLista;
+      return novaLista;
+    }
+    else{
+      console.log(snapshot);
+      let novoObjeto = {};
+        novoObjeto['key'] = snapshot.key;
+        let val = snapshot.payload.val();
+        Object.keys(val).map(key => {
+          novoObjeto[key] = val[key]
+        });
+        console.log('novo objeto', novoObjeto)
+        return novoObjeto;
+    }
+  }
+
+  estabelecimentosAtivos(estabelecimentos: any[]){
+    let ativos: any[] = []
+    estabelecimentos.map(estabelecimento => {
+      if(estabelecimento.ativado)
+        ativos.push(estabelecimento);
+    })
+    return ativos;
   }
 
   facebook(){
@@ -122,9 +151,9 @@ export class FireService {
       })
   
   }
-  updateDDadosEstabelecimento(estabelecimento):Promise<any>{
+  updateDadosEstabelecimento(estabelecimento):Promise<any>{
     console.log(estabelecimento);
-    return this.db.object(`estabelecimentos/${this.estabelecimento.key}`).update(estabelecimento);
+    return this.db.object(`estabelecimentos/${estabelecimento.key}`).update(estabelecimento);
   }
 
   salvarDadosUsuário(cadastro: any){

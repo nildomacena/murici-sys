@@ -77,7 +77,7 @@ export class AdminComponent implements OnInit {
 
   onSelectEstabelecimento(estabelecimento){
     console.log(estabelecimento);
-    this.router.navigate(['estabelecimento'], {queryParams: estabelecimento});
+    this.router.navigate(['estabelecimento'], {queryParams: {key: estabelecimento.key}});
   }
 
   onSubmitCadastro(){
@@ -89,6 +89,10 @@ export class AdminComponent implements OnInit {
       .catch(err => {
         alert("Erro: "+err);
       })
+  }
+
+  habilitarEstabelecimento(estabelecimento, event){
+    console.log(estabelecimento, event.path[0].checked);
   }
 
 }

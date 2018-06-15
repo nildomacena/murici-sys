@@ -34,6 +34,12 @@
         </div>
       </div>
       <div class="row">
+        <div class="input-field col s12">
+          <textarea id="horarioFuncionamento" formControlName="horarioFuncionamento" class="materialize-textarea"></textarea>
+          <label for="horarioFuncionamento">Horário de Funcionamento</label>
+        </div>
+      </div>
+      <div class="row">
         <h5>Telefones</h5>
         <div class="input-field col s12 m6">
           <input id="telefonePrimario" formControlName="telefonePrimario" type="text" class="validate">
@@ -55,6 +61,7 @@
           <i class="material-icons left">map</i>Localização no Mapa
         </button>
       </div>
+      <!--
       <div formGroupName="horario" >
         <div class="row">
           <div class="col s12 l6" formGroupName="domingo">
@@ -81,6 +88,8 @@
             </div>
           </div>
         </div>
+
+
         <div class="row">
           <div class="col s12 l6" formGroupName="terca">
             <div class="row valign-wrapper">
@@ -169,6 +178,7 @@
           </div>
         </div>
       </div>
+    -->
       <div class="row">
         <input type="submit" [disabled]="this.form.invalid" class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4">
       </div>

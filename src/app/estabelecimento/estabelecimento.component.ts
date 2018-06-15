@@ -42,6 +42,7 @@ export class EstabelecimentoComponent implements OnInit {
           'lat': new FormControl(''),
           'lng': new FormControl(''),
         }),
+        'horarioFuncionamento': new FormControl('', [Validators.required]),
         'horario': new FormGroup({
           'domingo': new FormGroup({
             'abre': new FormControl(false),
@@ -82,16 +83,21 @@ export class EstabelecimentoComponent implements OnInit {
         console.log(params);
         if(params.key){
           this.admin = true;
-          this.estabelecimento = params;
-          this.spinnerService.hide();
-          this.atualizaForm();
+          this.fire.getEstabelecimentoByKey(params.key)
+            .then(estabelecimento =>{
+              console.log(estabelecimento);
+              this.estabelecimento = estabelecimento;
+              this.spinnerService.hide();
+              this.atualizaForm();
+            })
         }
         else
           this.fire.afAuth.authState.subscribe(user => {
             if(user){
               this.user = user;
-              this.fire.getEstabelecimentoById(user.uid)
+              this.fire.getEstabelecimentoByUid(user.uid)
                 .then(estabelecimento => {
+                  console.log(estabelecimento);
                   this.estabelecimento = estabelecimento;
                   this.spinnerService.hide();
                   this.atualizaForm();
@@ -104,6 +110,7 @@ export class EstabelecimentoComponent implements OnInit {
   atualizaForm(){
     this.form.controls['nome'].setValue(this.estabelecimento.nome);
     this.form.controls['nomeResponsavel'].setValue(this.estabelecimento.nomeResponsavel);
+    this.form.controls['horarioFuncionamento'].setValue(this.estabelecimento.horarioFuncionamento);
     this.estabelecimento.descricao? this.form.controls['descricao'].setValue(this.estabelecimento.descricao): '';
     this.estabelecimento.telefonePrimario? this.form.controls['telefonePrimario'].setValue(this.estabelecimento.telefonePrimario): '';
     this.estabelecimento.telefoneSecundario? this.form.controls['telefoneSecundario'].setValue(this.estabelecimento.telefoneSecundario): '';
@@ -127,7 +134,9 @@ export class EstabelecimentoComponent implements OnInit {
 
   onSubmit(){
     this.spinnerService.show();
-    this.fire.updateDDadosEstabelecimento(this.form.value)
+    this.form.value['key'] = this.estabelecimento.key;
+    console.log(this.form.value);
+    this.fire.updateDadosEstabelecimento(this.form.value)
       .then(_ => {
         console.log('atualizado');
         this.spinnerService.hide();
@@ -182,7 +191,7 @@ export class EstabelecimentoComponent implements OnInit {
     this.fire.salvarImagens(this.avatar, this.imagemAdicional)
       .then(result => {
         this.spinnerService.hide();
-        this.fire.getEstabelecimentoById(this.user.uid)
+        this.fire.getEstabelecimentoByUid(this.user.uid)
           .then(estabelecimento => {
             this.estabelecimento = estabelecimento;
           })

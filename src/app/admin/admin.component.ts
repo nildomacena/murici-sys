@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { FireService } from './../services/fire.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -17,7 +18,7 @@ export class AdminComponent implements OnInit {
   categorias: any[] = [];
   categoriaSelecionada: any;
   estabelecimentosCategoria: any[] = [];
-  constructor(private afAuth: AngularFireAuth, private fire: FireService) {
+  constructor(private afAuth: AngularFireAuth, private fire: FireService, private router: Router) {
     this.fire.getCategorias()
       .then(categorias => {
         this.categorias = categorias;
@@ -72,6 +73,11 @@ export class AdminComponent implements OnInit {
         console.log(estabelecimentos);
         this.estabelecimentosCategoria = estabelecimentos;
       })
+  }
+
+  onSelectEstabelecimento(estabelecimento){
+    console.log(estabelecimento);
+    this.router.navigate(['estabelecimento'], {queryParams: estabelecimento});
   }
 
   onSubmitCadastro(){

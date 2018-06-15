@@ -2,13 +2,18 @@
 
 <div class="row">
   <div class="col s12" >
-    <ul class="tabs" style="overflow-x:hidden;">
-      <li class="tab col s6"><a href="#test1">INFORMAÇÕES GERAIS</a></li>
-      <li class="tab col s6"><a href="#test2">IMAGENS</a></li>
+    <ul class="tabs" *ngIf="!admin" style="overflow-x:hidden;">
+      <li class="tab col s6"><a href="#info-tab">INFORMAÇÕES GERAIS</a></li>
+      <li class="tab col s6"><a href="#imagens-tab">IMAGENS</a></li>
+    </ul>
+    <ul class="tabs" *ngIf="admin" style="overflow-x:hidden;">
+      <li class="tab col s4"><a href="#info-tab">INFORMAÇÕES GERAIS</a></li>
+      <li class="tab col s4"><a href="#imagens-tab">IMAGENS</a></li>
+      <li class="tab col s4"><a href="#admin-tab">ADMIN</a></li>
     </ul>
   </div>
   <div class="row container">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" id="test1" class="col s12">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" id="info-tab" class="col s12">
       <h3 class="center-align">Informações Gerais</h3>
       <br>
       <div class="row">
@@ -171,7 +176,7 @@
   </div>
 </div>
 
-<div id="test2" class="col s12 container">
+<div id="imagens-tab" class="col s12 container">
   <h3 class="center-align">Imagens</h3>
   <br>
   <div class="row">
@@ -206,6 +211,9 @@
   </div>
 </div>
 
+<div *ngIf="admin" class="col s12" id="admin-tab">
+  teste
+</div>
 
 <div class="modal" id="modal_endereco">
   <div id="map" class="modal-content">

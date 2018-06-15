@@ -94,7 +94,7 @@
         </ul>
         <ul class="collection with-header">
           <li class="collection-header"><h4>{{categoriaSelecionada?.nome}}</h4></li>
-          <li *ngFor="let estabelecimento of estabelecimentosCategoria" class="collection-item">{{estabelecimento.nome}}</li>
+          <a style="cursor: pointer;" *ngFor="let estabelecimento of estabelecimentosCategoria" (click)="onSelectEstabelecimento(estabelecimento)" class="collection-item">{{estabelecimento.nome}}</a>
         </ul>
       </div>
     </div>

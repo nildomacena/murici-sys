@@ -4,6 +4,7 @@ import {} from '@types/googlemaps';
 import { AgmMap } from '@agm/core';
 import { FireService } from '../services/fire.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { ActivatedRoute } from '@angular/router';
 
 declare var jQuery: any;
 declare var Materialize: any;
@@ -23,83 +24,100 @@ export class EstabelecimentoComponent implements OnInit {
   imagemAdicional;
   estabelecimento: any;
   user: any;
+  admin: boolean;
   @ViewChild('agmMap') agmMap : AgmMap
   constructor(
     public fire: FireService,
-    public spinnerService: Ng4LoadingSpinnerService
+    public spinnerService: Ng4LoadingSpinnerService,
+    private route: ActivatedRoute
     ) {
-    this.spinnerService.show();
-    this.form = new FormGroup({
-      'nome': new FormControl('',[Validators.required]),
-      'nomeResponsavel': new FormControl('', [Validators.required]),
-      'telefonePrimario': new FormControl('', [Validators.required]),
-      'telefoneSecundario': new FormControl('', [Validators.required]),
-      'descricao': new FormControl('', [Validators.required]),
-      'logradouro': new FormControl('', [Validators.required]),
-      'localizacao': new FormGroup({
-        'lat': new FormControl(''),
-        'lng': new FormControl(''),
-      }),
-      'horario': new FormGroup({
-        'domingo': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
+      this.form = new FormGroup({
+        'nome': new FormControl('',[Validators.required]),
+        'nomeResponsavel': new FormControl('', [Validators.required]),
+        'telefonePrimario': new FormControl('', [Validators.required]),
+        'telefoneSecundario': new FormControl('', [Validators.required]),
+        'descricao': new FormControl('', [Validators.required]),
+        'logradouro': new FormControl('', [Validators.required]),
+        'localizacao': new FormGroup({
+          'lat': new FormControl(''),
+          'lng': new FormControl(''),
         }),
-        'segunda': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
-        }),
-        'terca': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
-        }),
-        'quarta': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
-        }),
-        'quinta': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
-        }),
-        'sexta': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
-        }),
-        'sabado': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
-        }),
-        'feriado': new FormGroup({
-          'abre': new FormControl(false),
-          'descricao': new FormControl(''),
+        'horario': new FormGroup({
+          'domingo': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          }),
+          'segunda': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          }),
+          'terca': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          }),
+          'quarta': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          }),
+          'quinta': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          }),
+          'sexta': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          }),
+          'sabado': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          }),
+          'feriado': new FormGroup({
+            'abre': new FormControl(false),
+            'descricao': new FormControl(''),
+          })
         })
       })
-    })
-
-    this.fire.afAuth.authState.subscribe(user => {
-      if(user){
-        this.user = user;
-        this.fire.getEstabelecimentoById(user.uid)
-          .then(estabelecimento => {
-            this.estabelecimento = estabelecimento;
-            this.form.controls['nome'].setValue(this.estabelecimento.nome);
-            this.form.controls['nomeResponsavel'].setValue(this.estabelecimento.nomeResponsavel);
-            this.estabelecimento.descricao? this.form.controls['descricao'].setValue(this.estabelecimento.descricao): '';
-            this.estabelecimento.telefonePrimario? this.form.controls['telefonePrimario'].setValue(this.estabelecimento.telefonePrimario): '';
-            this.estabelecimento.telefoneSecundario? this.form.controls['telefoneSecundario'].setValue(this.estabelecimento.telefoneSecundario): '';
-            this.estabelecimento.logradouro? this.form.controls['logradouro'].setValue(this.estabelecimento.logradouro): '';
-            Materialize.updateTextFields();
-            this.spinnerService.hide();
+      this.route.queryParams.subscribe(params => {
+        this.spinnerService.show();
+        console.log(params);
+        if(params.key){
+          this.admin = true;
+          this.estabelecimento = params;
+          this.spinnerService.hide();
+          this.atualizaForm();
+        }
+        else
+          this.fire.afAuth.authState.subscribe(user => {
+            if(user){
+              this.user = user;
+              this.fire.getEstabelecimentoById(user.uid)
+                .then(estabelecimento => {
+                  this.estabelecimento = estabelecimento;
+                  this.spinnerService.hide();
+                  this.atualizaForm();
+                })
+            }
           })
-      }
-    })
+      })
   }
 
+  atualizaForm(){
+    this.form.controls['nome'].setValue(this.estabelecimento.nome);
+    this.form.controls['nomeResponsavel'].setValue(this.estabelecimento.nomeResponsavel);
+    this.estabelecimento.descricao? this.form.controls['descricao'].setValue(this.estabelecimento.descricao): '';
+    this.estabelecimento.telefonePrimario? this.form.controls['telefonePrimario'].setValue(this.estabelecimento.telefonePrimario): '';
+    this.estabelecimento.telefoneSecundario? this.form.controls['telefoneSecundario'].setValue(this.estabelecimento.telefoneSecundario): '';
+    this.estabelecimento.logradouro? this.form.controls['logradouro'].setValue(this.estabelecimento.logradouro): '';
+    setTimeout(() => {
+      Materialize.updateTextFields();
+    }, 500);
+  }
   ngOnInit() {
-    jQuery('ul.tabs').tabs();
+    setTimeout(() => {
+      jQuery('ul.tabs').tabs();
+    }, 500);
     jQuery('.materialboxed').materialbox();
     jQuery('.modal').modal();
-    //this.setMap(-9.3108144,-35.9434227)
     let horario:FormGroup = <FormGroup>this.form.controls['horario'];
     Object.keys(horario.controls).map(key => {
       let aux_control = <FormGroup>horario.controls[key];

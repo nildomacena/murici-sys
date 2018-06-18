@@ -41,6 +41,9 @@ export class FireService {
               })
   }
 
+  habilitarEstabelecimento(estabelecimento:any, habilitar:boolean){
+    return this.db.object(`estabelecimentos/${estabelecimento.key}`).update({ativo: habilitar, categoriaAtivo: estabelecimento.categoria+"_"+habilitar});
+  }
   getEstabelecimentoByKey(key){
     return this.db.object(`estabelecimentos/${key}`)
       .snapshotChanges().first().toPromise().then(estabelecimento => {

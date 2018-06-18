@@ -92,7 +92,11 @@ export class AdminComponent implements OnInit {
   }
 
   habilitarEstabelecimento(estabelecimento, event){
-    console.log(estabelecimento, event.path[0].checked);
+    this.fire.habilitarEstabelecimento(estabelecimento, event.path[0].checked)
+      .then(_ => {
+        this.fire.toast(event.path[0].checked? 'Estabelecimento habilitado': 'Estabelecimento desabilitado');
+      })
+    
   }
 
 }

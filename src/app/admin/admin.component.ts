@@ -13,11 +13,15 @@ declare var jQuery: any;
 export class AdminComponent implements OnInit {
   form: FormGroup;
   formCadastro: FormGroup;
+  formSorteio: FormGroup;
   adminLogado: boolean = false;
   corpoNotificacao: string = '';
   categorias: any[] = [];
   categoriaSelecionada: any;
   estabelecimentosCategoria: any[] = [];
+  estabelecimentos: any[] = [];
+  estabelecimentosFiltrados: any[] = [];
+
   constructor(private afAuth: AngularFireAuth, private fire: FireService, private router: Router) {
     this.fire.getCategorias()
       .then(categorias => {
@@ -35,6 +39,12 @@ export class AdminComponent implements OnInit {
       'imagemAdicional': new FormControl(false, [Validators.required]),
       'slides': new FormControl(false, [Validators.required])
     })
+    this.formSorteio = new FormGroup({
+      'texto': new FormControl('',[Validators.required]),
+      'linkInstagram': new FormControl('',[Validators.required]),
+      'imagem': new FormControl(''),
+      'estabelecimentoKey': new FormControl('', [Validators.required])
+    });
     this.afAuth.authState.subscribe(user =>{
       if(user)
         this.fire.checaAdmin(user.uid)
@@ -44,9 +54,13 @@ export class AdminComponent implements OnInit {
             setTimeout(() => {
               jQuery('ul.tabs').tabs();              
             }, 200);
-          })
-
-    })
+          });
+    });
+    this.fire.getEstabelecimentos()
+      .then(estabelecimentos => {
+        this.estabelecimentos = this.estabelecimentosFiltrados = estabelecimentos;
+        console.log(estabelecimentos);
+      })
   }
 
   ngOnInit() {
@@ -62,6 +76,17 @@ export class AdminComponent implements OnInit {
       })
   }
 
+  filtraEstabelecimentos(event){
+    if(event.srcElement.value == '')
+      this.estabelecimentosFiltrados = this.estabelecimentos;
+    else{
+      this.estabelecimentosFiltrados = this.estabelecimentos.filter(estabelecimento => {
+        return estabelecimento.nome.toUpperCase().includes(event.srcElement.value.toUpperCase());
+      })
+    }
+    console.log(event.srcElement.value);
+
+  }
   enviarNotificacao(){
     console.log('enviarNotificacao()',this.corpoNotificacao);
   }
@@ -96,7 +121,10 @@ export class AdminComponent implements OnInit {
       .then(_ => {
         this.fire.toast(event.path[0].checked? 'Estabelecimento habilitado': 'Estabelecimento desabilitado');
       })
-    
+  }
+
+  onSubmitSorteio(){
+    console.log(this.formSorteio.value);
   }
 
 }

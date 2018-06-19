@@ -33,6 +33,12 @@ export class FireService {
                 return Promise.resolve(value[0]['admin']);
               })
   }
+  getEstabelecimentos(){
+    return this.db.list('estabelecimentos', ref => ref.orderByChild('ativo').equalTo(true))
+              .snapshotChanges().first().toPromise().then(snap => {
+                return Promise.resolve(this.snapshotParaValue(snap));
+              })
+  }
 
   getEstabelecimentoByUid(uid){
     return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))

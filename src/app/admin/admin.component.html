@@ -4,7 +4,7 @@
       <li class="tab col s3" ><a class="active"  href="#cadastro">Cadastro</a></li>
       <li class="tab col s3"><a href="#notificacao">Notificações</a></li>
       <li class="tab col s3"><a href="#lista">Lista de estabelecimentos</a></li>
-      <li class="tab col s3"><a href="#test4">Test 4</a></li>
+      <li class="tab col s3"><a href="#sorteios">Sorteios</a></li>
     </ul>
   </div>
 </div>
@@ -111,6 +111,42 @@
       </div>
     </div>
   </div>
+
+  <div class="col l4 offset-l4 m10 offset-m1 s12" id="sorteios">
+    <div class="row">
+      <form [formGroup]="formSorteio" (ngSubmit)="onSubmitSorteio()" >
+          <div class="row">
+            <div class="col s12 input-field">
+              <textarea autofocus id="texto" name="texto" class="validate" formControlName="texto" class="materialize-textarea" ></textarea>
+              <label for="texto">Digite o corpo do texto do sorteio</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 input-field">
+              <input type="text" autofocus id="linkInstagram" name="linkInstagram" class="validate" formControlName="linkInstagram" >
+              <label for="linkInstagram">Link do instagram</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 input-field">
+              <input type="text" autofocus id="nome_estabelecimento" name="nome_estabelecimento" class="validate" (keyup)="filtraEstabelecimentos($event)" >
+              <label for="nome_estabelecimento">Pesquise o nome do estabelecimento</label>
+            </div>
+          </div>
+          <div class="row">
+            <label>Categoria</label>
+            <select class="col s12 input-field browser-default" formControlName="estabelecimentoKey" >
+              <option value="" disabled selected>Selecione a categoria</option>
+              <option *ngFor="let estabelecimento of estabelecimentosFiltrados" [value]="estabelecimento.key">{{estabelecimento.nome}}</option>
+            </select>
+          </div>
+          <div class="row">
+            <input [disabled]="formSorteio.invalid" class="col s12 m8 offset-m2 l4 offset-l4 btn btn-waves" type="submit" />
+          </div>
+        </form>
+    </div>
+  </div>
+
 </div>
 
 

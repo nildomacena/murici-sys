@@ -91,6 +91,17 @@ export class FireService {
       })*/
   }
 
+  salvarSorteio(sorteio:any){
+    return this.db.list('sorteios').push(sorteio);
+  }
+
+  salvarImagemSorteio(imagem, key):Promise<any>{
+    return this.storage.ref(`sorteios/${key}`).put(imagem)
+            .then(dados => {
+              return this.db.object(`sorteios/${key}`).update({imagem: dados.downloadURL});
+            })
+  }
+
   snapshotParaValue(snapshot):any{
     let novaLista = [];
     if(snapshot.length > 0){

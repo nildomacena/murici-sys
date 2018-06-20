@@ -117,6 +117,12 @@
       <form [formGroup]="formSorteio" (ngSubmit)="onSubmitSorteio()" >
           <div class="row">
             <div class="col s12 input-field">
+              <input type="text" autofocus id="titulo" name="titulo" class="validate" formControlName="titulo" >
+              <label for="titulo">Título</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 input-field">
               <textarea autofocus id="texto" name="texto" class="validate" formControlName="texto" class="materialize-textarea" ></textarea>
               <label for="texto">Digite o corpo do texto do sorteio</label>
             </div>
@@ -134,14 +140,26 @@
             </div>
           </div>
           <div class="row">
-            <label>Categoria</label>
+            <label>Estabelecimentos</label>
             <select class="col s12 input-field browser-default" formControlName="estabelecimentoKey" >
-              <option value="" disabled selected>Selecione a categoria</option>
+              <option value="" disabled selected>Selecione o estabelecimento</option>
               <option *ngFor="let estabelecimento of estabelecimentosFiltrados" [value]="estabelecimento.key">{{estabelecimento.nome}}</option>
             </select>
           </div>
           <div class="row">
-            <input [disabled]="formSorteio.invalid" class="col s12 m8 offset-m2 l4 offset-l4 btn btn-waves" type="submit" />
+            <img class="col m3 s12" [src]="imagemSorteio? pathImagemSorteio: 'assets/imgs/no-photo.png'">
+            <div class="file-field input-field col m9 s12">
+              <div class="btn">
+                <span>imagem</span>
+                <input type="file" (change)="uploadFileSorteio($event)">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <input [disabled]="formSorteio.invalid || !imagemSorteio" class="col s12 m8 offset-m2 l4 offset-l4 btn btn-waves" type="submit" />
           </div>
         </form>
     </div>

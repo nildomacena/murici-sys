@@ -21,7 +21,8 @@ export class AdminComponent implements OnInit {
   estabelecimentosCategoria: any[] = [];
   estabelecimentos: any[] = [];
   estabelecimentosFiltrados: any[] = [];
-
+  imagemSorteio: any;
+  pathImagemSorteio: any;
   constructor(private afAuth: AngularFireAuth, private fire: FireService, private router: Router) {
     this.fire.getCategorias()
       .then(categorias => {
@@ -40,6 +41,7 @@ export class AdminComponent implements OnInit {
       'slides': new FormControl(false, [Validators.required])
     })
     this.formSorteio = new FormGroup({
+      'titulo': new FormControl('',[Validators.required]),
       'texto': new FormControl('',[Validators.required]),
       'linkInstagram': new FormControl('',[Validators.required]),
       'imagem': new FormControl(''),
@@ -123,8 +125,24 @@ export class AdminComponent implements OnInit {
       })
   }
 
+  uploadFileSorteio(event){
+    let file = this.imagemSorteio = event.target.files[0];
+    let reader = new FileReader();
+    reader.onload = (e => {
+      this.pathImagemSorteio = e.target.result;
+    });
+    reader.readAsDataURL(file);
+
+  }
+
   onSubmitSorteio(){
-    console.log(this.formSorteio.value);
+    this.fire.salvarSorteio(this.formSorteio.value)
+      .then(dados => {
+        this.fire.salvarImagemSorteio(this.imagemSorteio, dados.key)
+          .then(_ => {
+            this.fire.toast('Sorteio salvo');
+          })
+      })
   }
 
 }

@@ -134,6 +134,11 @@
             </div>
           </div>
           <div class="row">
+            <div class="col s12">
+              <input type="text" class="datepicker" id="data" name="data" formControlName="data">
+            </div>
+          </div>
+          <div class="row">
             <div class="col s12 input-field">
               <input type="text" autofocus id="nome_estabelecimento" name="nome_estabelecimento" class="validate" (keyup)="filtraEstabelecimentos($event)" >
               <label for="nome_estabelecimento">Pesquise o nome do estabelecimento</label>
@@ -147,7 +152,7 @@
             </select>
           </div>
           <div class="row">
-            <img class="col m3 s12" [src]="imagemSorteio? pathImagemSorteio: 'assets/imgs/no-photo.png'">
+            <img class="col m3 s12" (click)="console()" [src]="imagemSorteio? pathImagemSorteio: 'assets/imgs/no-photo.png'">
             <div class="file-field input-field col m9 s12">
               <div class="btn">
                 <span>imagem</span>

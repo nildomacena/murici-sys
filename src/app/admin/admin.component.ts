@@ -44,6 +44,7 @@ export class AdminComponent implements OnInit {
       'titulo': new FormControl('',[Validators.required]),
       'texto': new FormControl('',[Validators.required]),
       'linkInstagram': new FormControl('',[Validators.required]),
+      'data': new FormControl('',[Validators.required]),
       'imagem': new FormControl(''),
       'estabelecimentoKey': new FormControl('', [Validators.required])
     });
@@ -68,6 +69,13 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
     jQuery('ul.tabs').tabs();
     jQuery('select').material_select();
+    jQuery('.datepicker').pickadate({
+      closeOnSelect: false,
+      selectMonths: true,
+      today: 'Hoje',
+      clear: 'Limpar',
+      close: 'Ok'
+    });
   }
 
   login(){
@@ -92,7 +100,10 @@ export class AdminComponent implements OnInit {
   enviarNotificacao(){
     console.log('enviarNotificacao()',this.corpoNotificacao);
   }
-
+  console(){
+    let data = new Date(this.formSorteio.value['data']);
+    console.log(this.formSorteio.value, data);
+  }
   selectCategoria(categoria){
     this.categoriaSelecionada = categoria;
     this.fire.getEstabelecimentosPorCategoria(categoria.key)
@@ -129,13 +140,15 @@ export class AdminComponent implements OnInit {
     let file = this.imagemSorteio = event.target.files[0];
     let reader = new FileReader();
     reader.onload = (e => {
-      this.pathImagemSorteio = e.target.result;
+      //console.log(e.target.result);
+      this.pathImagemSorteio = e.target['result'];
     });
     reader.readAsDataURL(file);
 
   }
 
   onSubmitSorteio(){
+    this.formSorteio.controls['data'].setValue(new Date(this.formSorteio.value['data']).getTime());
     this.fire.salvarSorteio(this.formSorteio.value)
       .then(dados => {
         this.fire.salvarImagemSorteio(this.imagemSorteio, dados.key)

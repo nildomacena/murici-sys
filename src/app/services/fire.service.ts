@@ -39,6 +39,15 @@ export class FireService {
                 return Promise.resolve(this.snapshotParaValue(snap));
               })
   }
+  getSorteios():Promise<any>{
+    return this.db.list('sorteios').snapshotChanges().first().toPromise()  
+             .then(snap => {
+               if(snap.length > 0)
+                  return Promise.resolve(this.snapshotParaValue(snap))
+                else  
+                  return Promise.resolve([]);
+             })
+  }
 
   getEstabelecimentoByUid(uid){
     return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))

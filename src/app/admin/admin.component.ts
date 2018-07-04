@@ -14,6 +14,7 @@ export class AdminComponent implements OnInit {
   form: FormGroup;
   formCadastro: FormGroup;
   formSorteio: FormGroup;
+  sorteios: any[] = [];
   adminLogado: boolean = false;
   corpoNotificacao: string = '';
   categorias: any[] = [];
@@ -23,11 +24,16 @@ export class AdminComponent implements OnInit {
   estabelecimentosFiltrados: any[] = [];
   imagemSorteio: any;
   pathImagemSorteio: any;
+  dataSorteio: any;
   constructor(private afAuth: AngularFireAuth, private fire: FireService, private router: Router) {
     this.fire.getCategorias()
       .then(categorias => {
         this.categorias = categorias;
       });
+    this.fire.getSorteios()  
+      .then(sorteios => {
+        this.sorteios = sorteios;
+      })
 
     this.form = new FormGroup({
       'email': new FormControl('',[Validators.required, Validators.email]),
@@ -44,9 +50,10 @@ export class AdminComponent implements OnInit {
       'titulo': new FormControl('',[Validators.required]),
       'texto': new FormControl('',[Validators.required]),
       'linkInstagram': new FormControl('',[Validators.required]),
-      'data': new FormControl('',[Validators.required]),
       'imagem': new FormControl(''),
-      'estabelecimentoKey': new FormControl('', [Validators.required])
+      'data': new FormControl(''),
+      'estabelecimentoKey': new FormControl('', [Validators.required]),
+      'estabelecimentoNome': new FormControl('')
     });
     this.afAuth.authState.subscribe(user =>{
       if(user)
@@ -55,7 +62,17 @@ export class AdminComponent implements OnInit {
             console.log(admin);
             this.adminLogado = admin;
             setTimeout(() => {
-              jQuery('ul.tabs').tabs();              
+              jQuery('ul.tabs').tabs();    
+              jQuery('.datepicker').pickadate({
+                closeOnSelect: false,
+                selectMonths: true,
+                today: 'Hoje',
+                clear: 'Limpar',
+                close: 'Ok',
+                onSet: date => {
+                  this.dataSorteio = date.select;
+                }
+              });          
             }, 200);
           });
     });
@@ -69,13 +86,7 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
     jQuery('ul.tabs').tabs();
     jQuery('select').material_select();
-    jQuery('.datepicker').pickadate({
-      closeOnSelect: false,
-      selectMonths: true,
-      today: 'Hoje',
-      clear: 'Limpar',
-      close: 'Ok'
-    });
+    jQuery('.modal').modal();
   }
 
   login(){
@@ -85,7 +96,9 @@ export class AdminComponent implements OnInit {
         console.log('logado')
       })
   }
-
+  consolar(){
+    console.log(this.formSorteio)
+  }
   filtraEstabelecimentos(event){
     if(event.srcElement.value == '')
       this.estabelecimentosFiltrados = this.estabelecimentos;
@@ -146,14 +159,25 @@ export class AdminComponent implements OnInit {
     reader.readAsDataURL(file);
 
   }
+  addSorteio(){
+    jQuery('#modal-sorteio').modal('open');
+  }
 
   onSubmitSorteio(){
-    this.formSorteio.controls['data'].setValue(new Date(this.formSorteio.value['data']).getTime());
+    this.estabelecimentos.map(estabelecimento => {
+      if(estabelecimento.key == this.formSorteio.value['estabelecimentoKey'])
+        this.formSorteio.controls['estabelecimentoNome'].setValue(estabelecimento.nome);
+    });
+    console.log(this.formSorteio.value);
+    this.formSorteio.controls['data'].setValue(new Date(this.dataSorteio).getTime());
     this.fire.salvarSorteio(this.formSorteio.value)
       .then(dados => {
         this.fire.salvarImagemSorteio(this.imagemSorteio, dados.key)
           .then(_ => {
             this.fire.toast('Sorteio salvo');
+            jQuery('.modal').modal('close');
+            this.formSorteio.reset();
+
           })
       })
   }

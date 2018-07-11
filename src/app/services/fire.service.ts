@@ -39,6 +39,14 @@ export class FireService {
                 return Promise.resolve(this.snapshotParaValue(snap));
               })
   }
+
+  deletarSorteio(sorteio):Promise<void>{
+    console.log(sorteio);
+      return this.storage.ref(`sorteios/${sorteio.key}`).delete().first().toPromise()
+        .then(_ => {
+          return this.db.object(`sorteios/${sorteio.key}`).remove()
+        })
+  }
   getSorteios():Promise<any>{
     return this.db.list('sorteios').snapshotChanges().first().toPromise()  
              .then(snap => {

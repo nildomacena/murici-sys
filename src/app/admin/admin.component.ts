@@ -30,11 +30,7 @@ export class AdminComponent implements OnInit {
       .then(categorias => {
         this.categorias = categorias;
       });
-    this.fire.getSorteios()  
-      .then(sorteios => {
-        this.sorteios = sorteios;
-      })
-
+      this.getSorteios();
     this.form = new FormGroup({
       'email': new FormControl('',[Validators.required, Validators.email]),
       'senha': new FormControl('', [Validators.required])
@@ -89,6 +85,12 @@ export class AdminComponent implements OnInit {
     jQuery('.modal').modal();
   }
 
+  getSorteios(){
+    this.fire.getSorteios()  
+    .then(sorteios => {
+      this.sorteios = sorteios;
+    })
+  }
   login(){
     
     this.fire.login(this.form.value)
@@ -100,8 +102,9 @@ export class AdminComponent implements OnInit {
     console.log(this.formSorteio)
   }
   filtraEstabelecimentos(event){
-    if(event.srcElement.value == '')
+    if(event.srcElement.value == ''){
       this.estabelecimentosFiltrados = this.estabelecimentos;
+    }
     else{
       this.estabelecimentosFiltrados = this.estabelecimentos.filter(estabelecimento => {
         return estabelecimento.nome.toUpperCase().includes(event.srcElement.value.toUpperCase());
@@ -162,7 +165,15 @@ export class AdminComponent implements OnInit {
   addSorteio(){
     jQuery('#modal-sorteio').modal('open');
   }
-
+  deletarSorteio(sorteio){
+    if(confirm("Deseja realmente excluir o sorteio?"))
+      this.fire.deletarSorteio(sorteio)
+        .then(_ => {
+          this.fire.toast('Sorteio deletado');
+          this.getSorteios();
+        })
+  }
+  
   onSubmitSorteio(){
     this.estabelecimentos.map(estabelecimento => {
       if(estabelecimento.key == this.formSorteio.value['estabelecimentoKey'])
@@ -177,6 +188,7 @@ export class AdminComponent implements OnInit {
             this.fire.toast('Sorteio salvo');
             jQuery('.modal').modal('close');
             this.formSorteio.reset();
+            this.getSorteios();
 
           })
       })

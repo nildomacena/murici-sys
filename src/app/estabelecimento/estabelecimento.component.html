@@ -55,128 +55,13 @@
         </div>
       </div>
       <div class="row">
+        <div class="chips chips-initial"></div>
+      </div>
+      <div class="row">
         <button class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4" (click)="abrirModal()" >
           <i class="material-icons left">map</i>Localização no Mapa
         </button>
       </div>
-      <!--
-      <div formGroupName="horario" >
-        <div class="row">
-          <div class="col s12 l6" formGroupName="domingo">
-            <div class="row valign-wrapper">
-              <div class="col s6 l4 m4">
-                <input type="checkbox"  id="domingo_check" formControlName="abre" (change)="onChangeDia($event, 'domingo')" />
-                <label for="domingo_check">Domingo</label>
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="domingo_input" placeholder="Ex: 08:00-18:00" type="text" formControlName="descricao" class="validate">
-                <label for="domingo_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="col s12 l6" formGroupName="segunda">
-            <div class="row valign-wrapper">
-              <div class="col s6 l4 m4">
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="segunda_input" placeholder="Ex: 08:00-18:00" type="text"formControlName="descricao" class="validate">
-                <label for="segunda_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row">
-          <div class="col s12 l6" formGroupName="terca">
-            <div class="row valign-wrapper">
-              <div class="col s6 l4 m4">
-                <input type="checkbox" id="terca_check" formControlName="abre" (change)="onChangeDia($event, 'terca')"/>
-                <label for="terca_check">Terça-feira</label>
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="terca_input" placeholder="Ex: 08:00-18:00" type="text" formControlName="descricao" class="validate">
-                <label for="terca_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="col s12 l6" formGroupName="quarta">
-            <div class="row valign-wrapper">
-              <div class="col s6 l4 m4">
-                <input class="left" type="checkbox" id="segunda_check" formControlName="abre" (change)="onChangeDia($event, 'segunda')"/>
-                <label for="segunda_check">Segunda-feira</label>
-              </div>
-              <div>
-                <input class="left" type="checkbox" id="quarta_check" formControlName="abre" (change)="onChangeDia($event, 'quarta')"/>
-                <label for="quarta_check">Quarta-feira</label>
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="quarta_input" placeholder="Ex: 08:00-18:00" type="text" formControlName="descricao" class="validate">
-                <label for="quarta_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col s12 l6" formGroupName="quinta">
-            <div class="row valign-wrapper">
-              <div class="col s6 l4 m4">
-                <input type="checkbox" id="quinta_check" formControlName="abre" (change)="onChangeDia($event, 'quinta')"/>
-                <label for="quinta_check">Quinta-feira</label>
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="quinta_input" placeholder="Ex: 08:00-18:00" type="text" formControlName="descricao" class="validate">
-                <label for="quinta_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="col s12 l6" formGroupName="sexta">
-            <div class="row valign-wrapper">
-              <div class="col s6 l4 m4">
-                <input class="left" type="checkbox" id="sexta_check" formControlName="abre" (change)="onChangeDia($event, 'sexta')" />
-                <label for="sexta_check">Sexta-feira</label>
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="sexta_input" placeholder="Ex: 08:00-18:00" type="text" formControlName="descricao" class="validate">
-                <label for="sexta_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col s12 l6" formGroupName="sabado">
-            <div class="row valign-wrapper">
-              <div class="col s6 l4 m4">
-                <input type="checkbox" id="sabado_check" formControlName="abre" (change)="onChangeDia($event, 'sabado')"/>
-                <label for="sabado_check">Sábado</label>
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="sabado_input" placeholder="Ex: 08:00-18:00" type="text" formControlName="descricao" class="validate">
-                <label for="sabado_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="col s12 l6">
-            <div class="row valign-wrapper" formGroupName="feriado">
-              <div class="col s6 l4 m4">
-                <input class="left" type="checkbox" id="feriado_check" formControlName="abre" (change)="onChangeDia($event, 'feriado')"/>
-                <label for="feriado_check">Feriado</label>
-              </div>
-              <div class="col s6 l8 m8 input-field">
-                <input id="feriado_input" placeholder="Ex: 08:00-18:00" type="text" formControlName="descricao" class="validate">
-                <label for="feriado_input">Horário de funcionamento</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    -->
       <div class="row">
         <input type="submit" [disabled]="this.form.invalid" class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4">
       </div>
@@ -220,7 +105,7 @@
 </div>
 
 <div *ngIf="admin" class="col s12" id="admin-tab">
-  teste
+  <button class="btn waves-effect waves-green" (click)="openAdmin()">admin</button>
 </div>
 
 <div class="modal" id="modal_endereco">

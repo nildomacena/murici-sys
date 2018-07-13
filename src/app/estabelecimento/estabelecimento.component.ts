@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
-import {} from '@types/googlemaps';
-import { AgmMap } from '@agm/core';
 import { FireService } from '../services/fire.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AgmMap } from '@agm/core'
+//import {} from 'googlemaps';
 
 declare var jQuery: any;
 declare var Materialize: any;
-
+declare var google: any;
 @Component({
   selector: 'app-estabelecimento',
   templateUrl: './estabelecimento.component.html',
@@ -25,11 +25,14 @@ export class EstabelecimentoComponent implements OnInit {
   estabelecimento: any;
   user: any;
   admin: boolean;
+  tags: any[] = [];
+
   @ViewChild('agmMap') agmMap : AgmMap
   constructor(
     public fire: FireService,
     public spinnerService: Ng4LoadingSpinnerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
     ) {
       this.form = new FormGroup({
         'nome': new FormControl('',[Validators.required]),
@@ -86,6 +89,19 @@ export class EstabelecimentoComponent implements OnInit {
           this.fire.getEstabelecimentoByKey(params.key)
             .then(estabelecimento =>{
               console.log(estabelecimento);
+              if(estabelecimento.tags){
+                let data: any[] = [];
+                this.tags = estabelecimento.tags;
+                estabelecimento.tags.map(tag => {
+                  data.push({tag: tag});
+                })
+                console.log(data);
+                jQuery('.chips').material_chip({
+                  data: data,
+                  limit: 3,
+                  
+                })
+              }
               this.estabelecimento = estabelecimento;
               this.spinnerService.hide();
               this.atualizaForm();
@@ -97,7 +113,19 @@ export class EstabelecimentoComponent implements OnInit {
               this.user = user;
               this.fire.getEstabelecimentoByUid(user.uid)
                 .then(estabelecimento => {
-                  console.log(estabelecimento);
+                  if(estabelecimento.tags){
+                    let data: any[] = [];
+                    this.tags = estabelecimento.tags;
+                    estabelecimento.tags.map(tag => {
+                      data.push({tag: tag});
+                    })
+                    console.log(data);
+                    jQuery('.chips').material_chip({
+                      data: data,
+                      limit: 3,
+                      
+                    })
+                  }
                   this.estabelecimento = estabelecimento;
                   this.spinnerService.hide();
                   this.atualizaForm();
@@ -125,6 +153,18 @@ export class EstabelecimentoComponent implements OnInit {
     }, 500);
     jQuery('.materialboxed').materialbox();
     jQuery('.modal').modal();
+    jQuery('.chips').material_chip({
+      limit: 3
+    });
+    jQuery('.chips').on('chip.add', (e, chip) => {
+      console.log(e,chip);
+      this.estabelecimento.tags.push(chip.tag);
+    });
+    jQuery('.chips').on('chip.delete', (e, chip) => {
+      let index = this.estabelecimento.tags.indexOf(chip.tag);
+      this.estabelecimento.tags.splice(index,1);
+    });
+
     let horario:FormGroup = <FormGroup>this.form.controls['horario'];
     Object.keys(horario.controls).map(key => {
       let aux_control = <FormGroup>horario.controls[key];
@@ -133,14 +173,23 @@ export class EstabelecimentoComponent implements OnInit {
   }
 
   onSubmit(){
-    this.spinnerService.show();
-    this.form.value['key'] = this.estabelecimento.key;
-    console.log(this.form.value);
-    this.fire.updateDadosEstabelecimento(this.form.value)
-      .then(_ => {
-        console.log('atualizado');
-        this.spinnerService.hide();
-      })
+    if(this.estabelecimento.tags.length > 5){
+      alert(`Você só pode usar 5 tags. Delete ${this.estabelecimento.tags.length - 5} tag(s) para continuar`);
+    }
+
+    else{
+      let estabelecimento;
+      this.spinnerService.show();
+      this.form.value['key'] = this.estabelecimento.key;
+      estabelecimento = this.form.value;
+      estabelecimento['tags'] = this.estabelecimento.tags;
+      console.log(estabelecimento);
+      this.fire.updateDadosEstabelecimento(estabelecimento)
+        .then(_ => {
+          console.log('atualizado');
+          this.spinnerService.hide();
+        });
+    }
     
   }
 
@@ -211,6 +260,10 @@ export class EstabelecimentoComponent implements OnInit {
       let control_aux = <FormGroup>control.controls[dia];
       control_aux.controls['descricao'].disable();
     }
+  }
+
+  openAdmin(){
+    this.router.navigate(['admin']);
   }
 
 }

@@ -72,11 +72,7 @@ export class AdminComponent implements OnInit {
             }, 200);
           });
     });
-    this.fire.getEstabelecimentos()
-      .then(estabelecimentos => {
-        this.estabelecimentos = this.estabelecimentosFiltrados = estabelecimentos;
-        console.log(estabelecimentos);
-      })
+    this.getEstabelecimentos();
   }
 
   ngOnInit() {
@@ -86,11 +82,21 @@ export class AdminComponent implements OnInit {
   }
 
   getSorteios(){
+    this.fire.getEstabelecimentos()
+      .then(estabelecimentos => {
+        this.estabelecimentos = this.estabelecimentosFiltrados = estabelecimentos;
+        console.log(estabelecimentos);
+      })
+  }
+
+  getEstabelecimentos(){
     this.fire.getSorteios()  
     .then(sorteios => {
       this.sorteios = sorteios;
     })
   }
+
+
   login(){
     
     this.fire.login(this.form.value)

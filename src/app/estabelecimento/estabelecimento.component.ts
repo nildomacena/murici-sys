@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { FireService } from '../services/fire.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AgmMap } from '@agm/core'
-//import {} from 'googlemaps';
+import { AgmMap } from '@agm/core';
+//import {} from "@types/googlemaps";
 
 declare var jQuery: any;
 declare var Materialize: any;

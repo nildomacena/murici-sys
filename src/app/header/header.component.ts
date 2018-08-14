@@ -21,7 +21,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  onNavigate(path){
+    this.router.navigate([path]);
+  }
   sair(){
     this.fire.logout();
     this.router.navigate(['']);

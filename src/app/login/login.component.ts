@@ -12,6 +12,7 @@ declare var jQuery: any;
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
+  signup:boolean = false;
   formSignup: FormGroup;
   categorias: any[];
   loading: boolean = true;

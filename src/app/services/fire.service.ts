@@ -78,6 +78,8 @@ export class FireService {
     return this.db.list('estabelecimentos', ref => ref.orderByChild('categoria').equalTo(categoria))
               .snapshotChanges().first().toPromise().then(snap => {
                 console.log(snap);
+                if(snap.length == 0)
+                  return [];
                 return Promise.resolve(this.snapshotParaValue(snap));
               })
   }

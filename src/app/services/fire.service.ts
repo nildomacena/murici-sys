@@ -111,6 +111,7 @@ export class FireService {
   }
 
   salvarSorteio(sorteio:any){
+    sorteio['pendente'] = true;
     return this.db.list('sorteios').push(sorteio);
   }
 

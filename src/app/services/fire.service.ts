@@ -201,6 +201,8 @@ export class FireService {
       nome: cadastro.nomeEstabelecimento,
       ativo: false,
       nomeResponsavel: cadastro.nome,
+      tags:[],
+      avatar: 'https://firebasestorage.googleapis.com/v0/b/tradegames-2dff6.appspot.com/o/no-photo-available-300x225.png?alt=media&token=5d3303c5-528f-44ec-9f2c-02489cf488b2',
       uid: this.afAuth.auth.currentUser.uid,
     });
   }

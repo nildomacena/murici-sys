@@ -81,7 +81,7 @@ export class AdminComponent implements OnInit {
     jQuery('.modal').modal();
   }
 
-  getSorteios(){
+  getEstabelecimentos(){
     this.fire.getEstabelecimentos()
       .then(estabelecimentos => {
         this.estabelecimentos = this.estabelecimentosFiltrados = estabelecimentos;
@@ -89,7 +89,7 @@ export class AdminComponent implements OnInit {
       })
   }
 
-  getEstabelecimentos(){
+  getSorteios(){
     this.fire.getSorteios()  
     .then(sorteios => {
       this.sorteios = sorteios;

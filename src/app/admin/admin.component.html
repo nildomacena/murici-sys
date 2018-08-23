@@ -122,7 +122,9 @@
             <span class="title">{{sorteio.titulo}}</span>
             <p>Estabelecimento: {{sorteio.estabelecimentoNome}}</p>
             <p>Data do sorteio:{{sorteio.data | date}} </p>
-            <a style="margin-bottom: 5px" class="left btn waves-effect waves-light red secondary-content" (click)="deletarSorteio(sorteio)" >Deletar</a>
+            <p *ngIf="sorteio.ganhador?.nome" ><b>Ganhador: {{sorteio.ganhador.nome}}</b></p>
+            <button style="margin-right: 160px" class="btn waves-effect waves-light green secondary-content" [disabled]="sorteio.sortear" (click)="realizarSorteio(sorteio)" >Sortear</button>
+            <button style="margin-bottom: 5px" class="left btn waves-effect waves-light red secondary-content" [disabled]="sorteio.sortear" (click)="deletarSorteio(sorteio)" >Deletar</button>
           </li>
         </ul>
       </div>

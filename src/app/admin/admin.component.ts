@@ -30,35 +30,35 @@ export class AdminComponent implements OnInit {
       .then(categorias => {
         this.categorias = categorias;
       });
-      this.getSorteios();
+    this.getSorteios();
     this.form = new FormGroup({
-      'email': new FormControl('',[Validators.required, Validators.email]),
+      'email': new FormControl('', [Validators.required, Validators.email]),
       'senha': new FormControl('', [Validators.required])
     });
     this.formCadastro = new FormGroup({
-      'email': new FormControl('',[Validators.required, Validators.email]),
-      'nome': new FormControl('',[Validators.required]),
-      'categoria': new FormControl('',[Validators.required]),
+      'email': new FormControl('', [Validators.required, Validators.email]),
+      'nome': new FormControl('', [Validators.required]),
+      'categoria': new FormControl('', [Validators.required]),
       'imagemAdicional': new FormControl(false, [Validators.required]),
       'slides': new FormControl(false, [Validators.required])
     })
     this.formSorteio = new FormGroup({
-      'titulo': new FormControl('',[Validators.required]),
-      'texto': new FormControl('',[Validators.required]),
-      'linkInstagram': new FormControl('',[Validators.required]),
+      'titulo': new FormControl('', [Validators.required]),
+      'texto': new FormControl('', [Validators.required]),
+      'linkInstagram': new FormControl('', [Validators.required]),
       'imagem': new FormControl(''),
       'data': new FormControl(''),
       'estabelecimentoKey': new FormControl('', [Validators.required]),
       'estabelecimentoNome': new FormControl('')
     });
-    this.afAuth.authState.subscribe(user =>{
-      if(user)
+    this.afAuth.authState.subscribe(user => {
+      if (user)
         this.fire.checaAdmin(user.uid)
           .then(admin => {
             console.log(admin);
             this.adminLogado = admin;
             setTimeout(() => {
-              jQuery('ul.tabs').tabs();    
+              jQuery('ul.tabs').tabs();
               jQuery('.datepicker').pickadate({
                 closeOnSelect: false,
                 selectMonths: true,
@@ -68,7 +68,7 @@ export class AdminComponent implements OnInit {
                 onSet: date => {
                   this.dataSorteio = date.select;
                 }
-              });          
+              });
             }, 200);
           });
     });
@@ -81,7 +81,7 @@ export class AdminComponent implements OnInit {
     jQuery('.modal').modal();
   }
 
-  getEstabelecimentos(){
+  getEstabelecimentos() {
     this.fire.getEstabelecimentos()
       .then(estabelecimentos => {
         this.estabelecimentos = this.estabelecimentosFiltrados = estabelecimentos;
@@ -89,29 +89,30 @@ export class AdminComponent implements OnInit {
       })
   }
 
-  getSorteios(){
-    this.fire.getSorteios()  
-    .then(sorteios => {
-      this.sorteios = sorteios;
-    })
+  getSorteios() {
+    setTimeout(() => {
+      this.fire.getSorteios()
+        .then(sorteios => {
+          this.sorteios = sorteios;
+        })
+    },1000)
   }
 
+  login() {
 
-  login(){
-    
     this.fire.login(this.form.value)
       .then(_ => {
         console.log('logado')
       })
   }
-  consolar(){
+  consolar() {
     console.log(this.formSorteio)
   }
-  filtraEstabelecimentos(event){
-    if(event.srcElement.value == ''){
+  filtraEstabelecimentos(event) {
+    if (event.srcElement.value == '') {
       this.estabelecimentosFiltrados = this.estabelecimentos;
     }
-    else{
+    else {
       this.estabelecimentosFiltrados = this.estabelecimentos.filter(estabelecimento => {
         return estabelecimento.nome.toUpperCase().includes(event.srcElement.value.toUpperCase());
       })
@@ -119,14 +120,14 @@ export class AdminComponent implements OnInit {
     console.log(event.srcElement.value);
 
   }
-  enviarNotificacao(){
-    console.log('enviarNotificacao()',this.corpoNotificacao);
+  enviarNotificacao() {
+    console.log('enviarNotificacao()', this.corpoNotificacao);
   }
-  console(){
+  console() {
     let data = new Date(this.formSorteio.value['data']);
     console.log(this.formSorteio.value, data);
   }
-  selectCategoria(categoria){
+  selectCategoria(categoria) {
     this.categoriaSelecionada = categoria;
     this.fire.getEstabelecimentosPorCategoria(categoria.key)
       .then(estabelecimentos => {
@@ -135,30 +136,30 @@ export class AdminComponent implements OnInit {
       })
   }
 
-  onSelectEstabelecimento(estabelecimento){
+  onSelectEstabelecimento(estabelecimento) {
     console.log(estabelecimento);
-    this.router.navigate(['estabelecimento'], {queryParams: {key: estabelecimento.key}});
+    this.router.navigate(['estabelecimento'], { queryParams: { key: estabelecimento.key } });
   }
 
-  onSubmitCadastro(){
+  onSubmitCadastro() {
     this.fire.cadastrarEstabelecimento(this.formCadastro.value)
       .then(_ => {
         this.fire.toast('Estabelecimento cadastrado.');
         this.formCadastro.reset();
       })
       .catch(err => {
-        alert("Erro: "+err);
+        alert("Erro: " + err);
       })
   }
 
-  habilitarEstabelecimento(estabelecimento, event){
+  habilitarEstabelecimento(estabelecimento, event) {
     this.fire.habilitarEstabelecimento(estabelecimento, event.path[0].checked)
       .then(_ => {
-        this.fire.toast(event.path[0].checked? 'Estabelecimento habilitado': 'Estabelecimento desabilitado');
+        this.fire.toast(event.path[0].checked ? 'Estabelecimento habilitado' : 'Estabelecimento desabilitado');
       })
   }
 
-  uploadFileSorteio(event){
+  uploadFileSorteio(event) {
     let file = this.imagemSorteio = event.target.files[0];
     let reader = new FileReader();
     reader.onload = (e => {
@@ -168,21 +169,21 @@ export class AdminComponent implements OnInit {
     reader.readAsDataURL(file);
 
   }
-  addSorteio(){
+  addSorteio() {
     jQuery('#modal-sorteio').modal('open');
   }
-  deletarSorteio(sorteio){
-    if(confirm("Deseja realmente excluir o sorteio?"))
+  deletarSorteio(sorteio) {
+    if (confirm("Deseja realmente excluir o sorteio?"))
       this.fire.deletarSorteio(sorteio)
         .then(_ => {
           this.fire.toast('Sorteio deletado');
           this.getSorteios();
         })
   }
-  
-  onSubmitSorteio(){
+
+  onSubmitSorteio() {
     this.estabelecimentos.map(estabelecimento => {
-      if(estabelecimento.key == this.formSorteio.value['estabelecimentoKey'])
+      if (estabelecimento.key == this.formSorteio.value['estabelecimentoKey'])
         this.formSorteio.controls['estabelecimentoNome'].setValue(estabelecimento.nome);
     });
     console.log(this.formSorteio.value);
@@ -198,6 +199,14 @@ export class AdminComponent implements OnInit {
 
           })
       })
+  }
+
+  realizarSorteio(sorteio) {
+    this.fire.realizarSorteio(sorteio)
+      .then(_ => {
+        this.fire.toast('Sorteio realizado');
+        this.getSorteios();
+      });
   }
 
 }

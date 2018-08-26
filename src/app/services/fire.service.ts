@@ -57,6 +57,10 @@ export class FireService {
              })
   }
 
+  realizarSorteio(sorteio):Promise<any>{
+    return this.db.object(`sorteios/${sorteio.key}`).update({sortear:true});
+  }
+
   getEstabelecimentoByUid(uid){
     return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))
               .snapshotChanges().first().toPromise().then(snap => {
@@ -112,6 +116,7 @@ export class FireService {
 
   salvarSorteio(sorteio:any){
     sorteio['pendente'] = true;
+    sorteio['ganhador'] = {};
     return this.db.list('sorteios').push(sorteio);
   }
 

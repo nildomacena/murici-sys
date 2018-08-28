@@ -17,6 +17,7 @@ export class AdminComponent implements OnInit {
   sorteios: any[] = [];
   adminLogado: boolean = false;
   corpoNotificacao: string = '';
+  tituloNotificacao: string = '';
   categorias: any[] = [];
   categoriaSelecionada: any;
   estabelecimentosCategoria: any[] = [];
@@ -25,6 +26,7 @@ export class AdminComponent implements OnInit {
   imagemSorteio: any;
   pathImagemSorteio: any;
   dataSorteio: any;
+  estabelecimentoKeyNotificacao: string;
   constructor(private afAuth: AngularFireAuth, private fire: FireService, private router: Router) {
     this.fire.getCategorias()
       .then(categorias => {
@@ -120,8 +122,20 @@ export class AdminComponent implements OnInit {
     console.log(event.srcElement.value);
 
   }
-  enviarNotificacao() {
-    console.log('enviarNotificacao()', this.corpoNotificacao);
+  enviarNotificacao(selectNotificacao, textareaNotificacao ) {
+    console.log(selectNotificacao);
+    if(!this.estabelecimentoKeyNotificacao || !this.corpoNotificacao)
+      alert("Preencha todas as informações para enviar a notificação");
+    else{
+      if(confirm("Deseja realmente enviar uma notificação?"))
+        this.fire.enviarNotificacao(this.tituloNotificacao, this.corpoNotificacao, this.estabelecimentoKeyNotificacao)
+          .then(_ => {
+            this.fire.toast('Notificação enviada');
+            this.estabelecimentoKeyNotificacao = '';
+            selectNotificacao.selectedIndex = 0;
+            textareaNotificacao.value = '';
+          })
+    }
   }
   console() {
     let data = new Date(this.formSorteio.value['data']);

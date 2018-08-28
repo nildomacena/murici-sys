@@ -1,7 +1,7 @@
 <div class="row" [hidden]="!adminLogado">
   <div class="col s12">
     <ul class="tabs">
-      <li class="tab col s3" ><a class="active" href="#cadastro">Cadastro</a></li>
+      <li class="tab col s3"><a class="active" href="#cadastro">Cadastro</a></li>
       <li class="tab col s3"><a href="#notificacao">Notificações</a></li>
       <li class="tab col s3"><a href="#lista">Lista de estabelecimentos</a></li>
       <li class="tab col s3"><a href="#sorteios">Sorteios</a></li>
@@ -10,22 +10,22 @@
 </div>
 <div class="row">
   <!--Tela de login do admin-->
-  <form [formGroup]="form" [hidden]="adminLogado" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()" >
+  <form [formGroup]="form" [hidden]="adminLogado" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()">
     <div class="row">
       <div class="col s12 input-field">
-        <input type="text" autofocus id="email" name="email" class="validate" formControlName="email" >
+        <input type="text" autofocus id="email" name="email" class="validate" formControlName="email">
         <label for="email">Digite o email</label>
       </div>
     </div>
     <div class="row">
       <div class="col s12 input-field">
-        <input type="password" id="senha" class="validate" formControlName="senha" >
+        <input type="password" id="senha" class="validate" formControlName="senha">
         <label for="senha">Digite sua senha</label>
       </div>
     </div>
     <div class="row">
       <div class="col s6 offset-s3">
-        <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="form.invalid"  >Login</button>
+        <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="form.invalid">Login</button>
       </div>
     </div>
   </form>
@@ -34,22 +34,22 @@
 <div class="row" *ngIf="adminLogado">
   <!--Tab de cadastro-->
   <div class="col l4 offset-l4 m10 offset-m1 s12" id="cadastro">
-    <form [formGroup]="formCadastro" (ngSubmit)="onSubmitCadastro()" >
+    <form [formGroup]="formCadastro" (ngSubmit)="onSubmitCadastro()">
       <div class="row">
         <div class="col s12 input-field">
-          <input type="email" autofocus id="email" name="email" class="validate" formControlName="email" >
+          <input type="email" autofocus id="email" name="email" class="validate" formControlName="email">
           <label for="email">Digite o email</label>
         </div>
       </div>
       <div class="row">
         <div class="col s12 input-field">
-          <input type="text" autofocus id="nome" name="nome" class="validate" formControlName="nome" >
+          <input type="text" autofocus id="nome" name="nome" class="validate" formControlName="nome">
           <label for="nome">Nome do estabelecimento</label>
         </div>
       </div>
       <div class="row">
         <label>Categoria</label>
-        <select class="col s12 input-field browser-default" formControlName="categoria" >
+        <select class="col s12 input-field browser-default" formControlName="categoria">
           <option value="" disabled selected>Selecione a categoria</option>
           <option *ngFor="let categoria of categorias" [value]="categoria.key">{{categoria.nome}}</option>
         </select>
@@ -75,13 +75,26 @@
   <div class="col l4 offset-l4 m10 offset-m1 s12" id="notificacao">
     <div class="row">
       <div class="col s12 input-field">
-        <input type="text" [(ngModel)]="corpoNotificacao" autofocus id="notificacao_corpo" name="notificacao_corpo" class="validate">
+        <input type="text" autofocus id="titulo" name="titulo" class="validate" [(ngModel)]="tituloNotificacao">
+        <label for="titulo">Título da notificação</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 input-field">
+        <textarea autofocus id="texto" name="texto" class="validate" #textareaNotificacao [(ngModel)]="corpoNotificacao" class="materialize-textarea"></textarea>
         <label for="notificacao_corpo">Digite o corpo da notificação</label>
       </div>
     </div>
     <div class="row">
+      <label>Estabelecimentos</label>
+      <select class="col s12 input-field browser-default" #selectNotificacao [(ngModel)]="estabelecimentoKeyNotificacao">
+        <option value="" disabled selected>Selecione o estabelecimento</option>
+        <option *ngFor="let estabelecimento of estabelecimentosFiltrados" [value]="estabelecimento.key">{{estabelecimento.nome}}</option>
+      </select>
+    </div>
+    <div class="row">
       <div class="col s6 offset-s3">
-        <button (click)="enviarNotificacao()" class="btn btn-waves" style="width:100%">Enviar</button>
+        <button (click)="enviarNotificacao(selectNotificacao, textareaNotificacao)" class="btn btn-waves" style="width:100%">Enviar</button>
       </div>
     </div>
   </div>
@@ -94,18 +107,20 @@
           <a style="cursor: pointer;" *ngFor="let categoria of categorias" (click)="selectCategoria(categoria)" class="collection-item">{{categoria.nome}}</a>
         </ul>
         <ul class="collection with-header">
-          <li class="collection-header"><h4>{{categoriaSelecionada?.nome}}</h4></li>
+          <li class="collection-header">
+            <h4>{{categoriaSelecionada?.nome}}</h4>
+          </li>
           <li class="collection-item" *ngFor="let estabelecimento of estabelecimentosCategoria">
             <a style="cursor: pointer;" (click)="onSelectEstabelecimento(estabelecimento)">{{estabelecimento.nome}}</a>
             <div class="secondary-content">
-                <div class="switch">
-                  <label>
-                    Desabilitado
-                    <input [checked]="estabelecimento.ativado" (click)="habilitarEstabelecimento(estabelecimento, $event)" type="checkbox">
-                    <span class="lever"></span>
-                    Habilitado
-                  </label>
-                </div>
+              <div class="switch">
+                <label>
+                  Desabilitado
+                  <input [checked]="estabelecimento.ativado" (click)="habilitarEstabelecimento(estabelecimento, $event)" type="checkbox">
+                  <span class="lever"></span>
+                  Habilitado
+                </label>
+              </div>
             </div>
           </li>
         </ul>
@@ -117,43 +132,46 @@
     <div class="row">
       <div class="col s12">
         <ul class="collection" *ngIf="sorteios.length > 0">
-          <li class="collection-item avatar" *ngFor="let sorteio of sorteios" >
+          <li class="collection-item avatar" *ngFor="let sorteio of sorteios">
             <img [src]="sorteio.imagem" class="circle">
             <span class="title">{{sorteio.titulo}}</span>
             <p>Estabelecimento: {{sorteio.estabelecimentoNome}}</p>
             <p>Data do sorteio:{{sorteio.data | date}} </p>
-            <p *ngIf="sorteio.ganhador?.nome" ><b>Ganhador: {{sorteio.ganhador.nome}}</b></p>
-            <button style="margin-right: 160px" class="btn waves-effect waves-light green secondary-content" [disabled]="sorteio.sortear" (click)="realizarSorteio(sorteio)" >Sortear</button>
-            <button style="margin-bottom: 5px" class="left btn waves-effect waves-light red secondary-content" [disabled]="sorteio.sortear" (click)="deletarSorteio(sorteio)" >Deletar</button>
+            <p *ngIf="sorteio.participantes" >Possui inscritos</p>
+            <p *ngIf="sorteio.ganhador?.nome"><b>Ganhador: {{sorteio.ganhador.nome}}</b></p>
+            <button style="margin-right: 160px" class="btn waves-effect waves-light green secondary-content" [disabled]="sorteio.sortear"
+              (click)="realizarSorteio(sorteio)">Sortear</button>
+            <button style="margin-bottom: 5px" class="left btn waves-effect waves-light red secondary-content" [disabled]="sorteio.sortear"
+              (click)="deletarSorteio(sorteio)">Deletar</button>
           </li>
         </ul>
       </div>
     </div>
-      <div class="fixed-action-btn">
-        <a class="btn-floating right btn-large waves-effect waves-light red" (click)="addSorteio()"><i class="material-icons">add</i></a>
-      </div>
+    <div class="fixed-action-btn">
+      <a class="btn-floating right btn-large waves-effect waves-light red" (click)="addSorteio()"><i class="material-icons">add</i></a>
+    </div>
   </div>
 
 </div>
 
 <div id="modal-sorteio" class="modal">
   <div class="modal-content">
-    <form [formGroup]="formSorteio" (ngSubmit)="onSubmitSorteio()" >
+    <form [formGroup]="formSorteio" (ngSubmit)="onSubmitSorteio()">
       <div class="row">
         <div class="col s12 input-field">
-          <input type="text" autofocus id="titulo" name="titulo" class="validate" formControlName="titulo" >
+          <input type="text" autofocus id="titulo" name="titulo" class="validate" formControlName="titulo">
           <label for="titulo">Título</label>
         </div>
       </div>
       <div class="row">
         <div class="col s12 input-field">
-          <textarea autofocus id="texto" name="texto" class="validate" formControlName="texto" class="materialize-textarea" ></textarea>
+          <textarea autofocus id="texto" name="texto" class="validate" formControlName="texto" class="materialize-textarea"></textarea>
           <label for="texto">Digite o corpo do texto do sorteio</label>
         </div>
       </div>
       <div class="row">
         <div class="col s12 input-field">
-          <input type="text" autofocus id="linkInstagram" name="linkInstagram" class="validate" formControlName="linkInstagram" >
+          <input type="text" autofocus id="linkInstagram" name="linkInstagram" class="validate" formControlName="linkInstagram">
           <label for="linkInstagram">Link do instagram</label>
         </div>
       </div>
@@ -164,13 +182,13 @@
       </div>
       <div class="row">
         <div class="col s12 input-field">
-          <input type="text" autofocus id="nome_estabelecimento" name="nome_estabelecimento" class="validate" (keyup)="filtraEstabelecimentos($event)" >
+          <input type="text" autofocus id="nome_estabelecimento" name="nome_estabelecimento" class="validate" (keyup)="filtraEstabelecimentos($event)">
           <label for="nome_estabelecimento">Pesquise o nome do estabelecimento</label>
         </div>
       </div>
       <div class="row">
         <label>Estabelecimentos</label>
-        <select class="col s12 input-field browser-default" formControlName="estabelecimentoKey" >
+        <select class="col s12 input-field browser-default" formControlName="estabelecimentoKey">
           <option value="" disabled selected>Selecione o estabelecimento</option>
           <option *ngFor="let estabelecimento of estabelecimentosFiltrados" [value]="estabelecimento.key">{{estabelecimento.nome}}</option>
         </select>
@@ -188,7 +206,8 @@
         </div>
       </div>
       <div class="row">
-        <input [disabled]="formSorteio.invalid || !imagemSorteio" class="col s12 m8 offset-m2 l4 offset-l4 btn btn-waves" type="submit" />
+        <input [disabled]="formSorteio.invalid || !imagemSorteio" class="col s12 m8 offset-m2 l4 offset-l4 btn btn-waves" type="submit"
+        />
       </div>
     </form>
   </div>

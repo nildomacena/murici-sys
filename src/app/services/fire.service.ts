@@ -253,8 +253,8 @@ export class FireService {
   }
 
 
-  enviarNotificacao(corpo){
-    //firebase.messaging().
+  enviarNotificacao(titulo, corpo, estabelecimento):ThenableReference{
+    return this.db.list('notificacoes').push({titulo:titulo, corpo:corpo,estabelecimento:estabelecimento});
   }
 
   

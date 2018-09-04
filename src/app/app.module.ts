@@ -19,6 +19,7 @@ import { appRoutes } from './app.routes';
 import { HeaderComponent } from './header/header.component';
 import { AgmCoreModule } from '@agm/core';
 import { AdminComponent } from './admin/admin.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBYUNHsD_X4yxr60N9Vjgb2kZSEQA3-Egs",
@@ -54,7 +55,8 @@ const firebaseConfig = {
     })
   ],
   providers: [
-    FireService
+    FireService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

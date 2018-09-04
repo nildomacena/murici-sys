@@ -82,7 +82,6 @@ export class EstabelecimentoComponent implements OnInit {
         })
       })
       this.route.queryParams.subscribe(params => {
-        this.spinnerService.show();
         console.log(params);
         if(params.key){
           this.admin = true;
@@ -99,7 +98,7 @@ export class EstabelecimentoComponent implements OnInit {
                 jQuery('.chips').material_chip({
                   data: data,
                   limit: 3,
-                  
+                  placeholder: 'Digite as tags para as pessoas acharem seu estabelecimento'
                 })
               }
               this.estabelecimento = estabelecimento;
@@ -148,6 +147,8 @@ export class EstabelecimentoComponent implements OnInit {
     }, 500);
   }
   ngOnInit() {
+    console.log('ngOnInit');
+    this.spinnerService.show();
     setTimeout(() => {
       jQuery('ul.tabs').tabs();
     }, 500);
@@ -158,7 +159,10 @@ export class EstabelecimentoComponent implements OnInit {
     });
     jQuery('.chips').on('chip.add', (e, chip) => {
       console.log(e,chip);
-      this.estabelecimento.tags.push(chip.tag);
+      if(!this.estabelecimento.tags)
+        this.estabelecimento.tags = []; 
+        this.estabelecimento.tags.push(chip.tag);
+  
     });
     jQuery('.chips').on('chip.delete', (e, chip) => {
       let index = this.estabelecimento.tags.indexOf(chip.tag);

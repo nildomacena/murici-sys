@@ -3,8 +3,12 @@
     <h2 class="center-align">{{signup? 'Cadastrar usuário': 'Login'}}</h2>
   </div>
 </div>
+<div class="row">
+  <div class="col"></div>
+  <div class="col"><ng4-loading-spinner  [threshold]="2000" [loadingText]="'Carregando...'" [zIndex]="9999"> </ng4-loading-spinner> </div>
+  <div class="col"></div>
+</div>
 
-<!--<ng4-loading-spinner  [threshold]="2000" [template]="template" [loadingText]="'Carregando...'" [zIndex]="9999"> </ng4-loading-spinner>-->
 <div class="row">
   <form [formGroup]="form" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()" >
     <div class="row">

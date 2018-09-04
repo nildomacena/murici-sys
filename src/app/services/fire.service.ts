@@ -17,22 +17,45 @@ export class FireService {
   
   constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth, public storage: AngularFireStorage ) {
     this.afAuth.authState.subscribe(user => {
-      console.log(user);
-      if(user.uid)
+      console.log('fire service user',user);
+      if(user.uid){
         this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(user.uid))
           .snapshotChanges().first().toPromise().then((result => {
             this.estabelecimento = this.snapshotParaValue(result)[0];
             console.log(this.estabelecimento);
-          }))
+          }));
+      }
     })
   }
 
-  checaAdmin(uid):Promise<any>{
-    return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid))
-              .valueChanges().first().toPromise().then(value => {
-                return Promise.resolve(value[0]['admin']);
-              })
+  checaAdmin(uid?:any):Promise<any>{
+    console.log('user checa admin',this.afAuth.auth.currentUser);
+    return this.afAuth.authState.delay(2000).first().toPromise().then(user => {
+      if(user){
+        return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid?uid:this.afAuth.auth.currentUser.uid))
+        .valueChanges().delay(2000).first().toPromise().then(value => {
+          return Promise.resolve(value[0]['admin']);
+        });
+      }
+      else  
+        return Promise.resolve(false);
+    });
   }
+
+  checaAtivo(uid?:any):Promise<any>{
+    return this.afAuth.authState.delay(2000).first().toPromise().then(user => {
+      if(user){
+        return this.db.list('estabelecimentos', ref => ref.orderByChild('uid').equalTo(uid?uid:this.afAuth.auth.currentUser.uid))
+        .valueChanges().delay(2000).first().toPromise().then(value => {
+          console.log(value[0]['ativo']);
+          return Promise.resolve(value[0]['ativo']);
+        });
+      }
+      else  
+        return Promise.resolve(false);
+    });
+  }
+
   getEstabelecimentos(){
     return this.db.list('estabelecimentos', ref => ref.orderByChild('ativo').equalTo(true))
               .snapshotChanges().first().toPromise().then(snap => {

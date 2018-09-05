@@ -96,6 +96,18 @@ export class LoginComponent implements OnInit {
             this.spinnerService.hide();
           })
       })
+      .catch(err => {
+        this.spinnerService.hide();
+        if(err.code == 'auth/wrong-password'){
+          alert('Senha incorreta. Tente novamente');
+        }
+        else if(err.code == 'auth/user-not-found'){
+          alert('Email não encontrado. Verifique o email e tente novamente. Caso o erro persista, entre em contato com um administrador do sistema');
+        }
+        else{
+          alert('Aconteceu algum erro. Tente novamente mais tarde. Caso o erro persista, entre em contato com um administrador do sistema');
+        }
+      })
   }
 
 }

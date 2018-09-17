@@ -77,6 +77,7 @@
 <div id="imagens-tab" class="col s12 container">
   <h3 class="center-align">Imagens</h3>
   <br>
+
   <div class="row">
     <img class="col m3 s12" [src]="estabelecimento?.avatar? estabelecimento?.avatar: 'assets/imgs/no-photo.png'">
     <div class="file-field input-field col m9 s12">
@@ -90,7 +91,8 @@
     </div>
   </div>
   <br><br>
-  <div class="row">
+
+  <div class="row" *ngIf="estabelecimento?.imagensAdicionais">
     <img [src]="estabelecimento?.imagemAdicional? estabelecimento?.imagemAdicional: 'assets/imgs/no-photo.png'" class="col m3 s12" >
     <div class="file-field imagem-adicional input-field col m9 s12">
       <div class="btn">
@@ -102,6 +104,36 @@
       </div>
     </div>
   </div>
+
+  <div class="row" *ngIf="estabelecimento?.imagensAdicionais == 2">
+    <img [src]="estabelecimento?.imagemAdicional_2? estabelecimento?.imagemAdicional_2: 'assets/imgs/no-photo.png'" class="col m3 s12" >
+    <div class="file-field imagem-adicional input-field col m9 s12">
+      <div class="btn">
+        <span>imagem adicional</span>
+        <input type="file" (change)="uploadFile($event, 'imagemAdicional_2')">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="admin">
+    <p>Imagens adicionais: {{estabelecimento?.imagensAdicionais? estabelecimento?.imagensAdicionais: 'Nenhuma'}}</p>
+    <h5 class="center-align">Quantidade de imagens adicionais</h5>
+    <select class="col s12 input-field browser-default" [(ngModel)]="imagensAdicionais" >
+      <option value="" disabled selected>Selecione o estabelecimento</option>
+      <option [value]="false">Nenhuma</option>
+      <option [value]="1">Uma imagem adicional</option>
+      <option [value]="2">Duas imagens adicionais</option>
+    </select>
+    <br><br>
+    <button [disabled]="!imagensAdicionais" class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4" (click)="habilitarImagemAdicional()" >
+      Salvar imagens&nbsp;<i class="material-icons right">send</i>
+    </button>
+  </div>
+  <hr>
+  <br><br>
   <div class="row">
       <button class="btn btn-waves col s12 m6 offset-m3 offset-l4 l4" (click)="enviarImagens()" >
         Salvar imagens&nbsp;<i class="material-icons right">send</i>
@@ -110,6 +142,7 @@
 </div>
 
 <div *ngIf="admin" class="col s12" id="admin-tab">
+
   <button class="btn waves-effect waves-green" (click)="openAdmin()">admin</button>
 </div>
 

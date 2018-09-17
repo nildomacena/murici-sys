@@ -27,6 +27,7 @@ export class AdminComponent implements OnInit {
   pathImagemSorteio: any;
   dataSorteio: any;
   estabelecimentoKeyNotificacao: string;
+  destaques: any[] = [];
   constructor(private afAuth: AngularFireAuth, private fire: FireService, private router: Router) {
     this.fire.getCategorias()
       .then(categorias => {
@@ -79,6 +80,7 @@ export class AdminComponent implements OnInit {
       }
     });
     this.getEstabelecimentos();
+    this.getDestaques();
   }
 
   ngOnInit() {
@@ -92,9 +94,15 @@ export class AdminComponent implements OnInit {
       .then(estabelecimentos => {
         this.estabelecimentos = this.estabelecimentosFiltrados = estabelecimentos;
         console.log(estabelecimentos);
-      })
+      });
   }
 
+  getDestaques(){
+    this.fire.getDestaques()
+      .then(destaques => {
+        this.destaques = destaques;
+      });
+  }
   getSorteios() {
     setTimeout(() => {
       this.fire.getSorteios()

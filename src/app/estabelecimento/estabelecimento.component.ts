@@ -304,4 +304,12 @@ export class EstabelecimentoComponent implements OnInit {
       })
   }
 
+  colocarDestaque(){
+    if(confirm("Tem certeza que deseja tornar esse estabelecimento como destaque?"))
+      this.fire.colocarEmDestaque(this.estabelecimento)
+        .then(_ => {
+          this.fire.toast('Atualizado');
+        })
+  }
+
 }

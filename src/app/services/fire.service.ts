@@ -59,6 +59,18 @@ export class FireService {
       })
   }
 
+  getDestaques(){
+    return this.db.list('destaques')
+      .snapshotChanges().first().toPromise().then(snap => {
+        if(snap.length > 0)
+          return Promise.resolve(this.snapshotParaValue(snap));
+        else  
+          return Promise.resolve(null);
+      })
+  }
+  colocarEmDestaque(estabelecimento):Promise<any>{
+    return this.db.list(`destaques/${estabelecimento.key}`).set('estabelecimento',estabelecimento);
+  }
   deletarSorteio(sorteio): Promise<void> {
     return this.storage.ref(`sorteios/${sorteio.key}`).delete().first().toPromise()
       .then(_ => {
@@ -146,6 +158,7 @@ export class FireService {
   }
 
   snapshotParaValue(snapshot): any {
+    console.log('snapshot', snapshot)
     let novaLista = [];
     if (snapshot.length > 0) {
       snapshot.map(objeto => {

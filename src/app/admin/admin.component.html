@@ -1,10 +1,11 @@
 <div class="row" [hidden]="!adminLogado">
   <div class="col s12">
     <ul class="tabs">
-      <li class="tab col s3"><a class="active" href="#cadastro">Cadastro</a></li>
-      <li class="tab col s3"><a href="#notificacao">Notificações</a></li>
+      <li class="tab col s2"><a class="active" href="#cadastro">Cadastro</a></li>
+      <li class="tab col s2"><a href="#notificacao">Notificações</a></li>
       <li class="tab col s3"><a href="#lista">Lista de estabelecimentos</a></li>
       <li class="tab col s3"><a href="#sorteios">Sorteios</a></li>
+      <li class="tab col s2"><a href="#destaques">Destaques</a></li>
     </ul>
   </div>
 </div>
@@ -151,7 +152,19 @@
       <a class="btn-floating right btn-large waves-effect waves-light red" (click)="addSorteio()"><i class="material-icons">add</i></a>
     </div>
   </div>
-
+  <div class="col l8 offset-l2 m10 offset-m1 s12" id="destaques">
+    <div class="row">
+      <div class="col s12 m6 l3" *ngFor="let destaque of destaques" >
+        <div class="card">
+          <div class="card-image">
+            <img [src]="destaque.estabelecimento.avatar">
+            <span class="card-title">{{destaque.estabelecimento.nome}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-floating right btn-large waves-effect waves-light" >Adicionar destaque</button>
+  </div>
 </div>
 
 <div id="modal-sorteio" class="modal">

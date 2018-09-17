@@ -142,8 +142,9 @@
 </div>
 
 <div *ngIf="admin" class="col s12" id="admin-tab">
-
-  <button class="btn waves-effect waves-green" (click)="openAdmin()">admin</button>
+  <div class="row">
+    <button class="btn waves-effect waves-green col s6 offset-s3" (click)="colocarDestaque()">Colocar em destaque</button>
+  </div>
 </div>
 
 <div class="modal" id="modal_endereco">

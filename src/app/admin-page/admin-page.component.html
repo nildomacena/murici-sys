@@ -1,0 +1,21 @@
+<div class="row">
+  <form [formGroup]="form" [hidden]="adminLogado" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()">
+    <div class="row">
+      <div class="col s12 input-field">
+        <input type="text" autofocus id="email" name="email" class="validate" formControlName="email">
+        <label for="email">Digite o email</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 input-field">
+        <input type="password" id="senha" class="validate" formControlName="senha">
+        <label for="senha">Digite sua senha</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s6 offset-s3">
+        <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="form.invalid">Login</button>
+      </div>
+    </div>
+  </form>
+</div>

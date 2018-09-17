@@ -54,7 +54,7 @@ export class AdminComponent implements OnInit {
       'estabelecimentoNome': new FormControl('')
     });
     this.afAuth.authState.subscribe(user => {
-      if (user)
+      if (user){
         this.fire.checaAdmin(user.uid)
           .then(admin => {
             console.log(admin);
@@ -73,6 +73,10 @@ export class AdminComponent implements OnInit {
               });
             }, 200);
           });
+      }
+      else{
+        this.fire.logout();
+      }
     });
     this.getEstabelecimentos();
   }

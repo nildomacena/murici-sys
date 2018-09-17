@@ -20,6 +20,7 @@ import { HeaderComponent } from './header/header.component';
 import { AgmCoreModule } from '@agm/core';
 import { AdminComponent } from './admin/admin.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminPageComponent } from './admin-page/admin-page.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBYUNHsD_X4yxr60N9Vjgb2kZSEQA3-Egs",
@@ -37,7 +38,8 @@ const firebaseConfig = {
     LoginComponent,
     EstabelecimentoComponent,
     HeaderComponent,
-    AdminComponent
+    AdminComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,

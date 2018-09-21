@@ -199,6 +199,7 @@ export class EstabelecimentoComponent implements OnInit {
       this.fire.updateDadosEstabelecimento(estabelecimento)
         .then(_ => {
           console.log('atualizado');
+          this.fire.toast('Dados atualizados.');
           this.spinnerService.hide();
         });
     }

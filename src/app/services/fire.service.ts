@@ -68,6 +68,11 @@ export class FireService {
           return Promise.resolve(null);
       })
   }
+
+  removerDestaque(estabelecimento){
+    return this.db.list(`destaques/${estabelecimento.key}`).remove();
+  }
+
   colocarEmDestaque(estabelecimento):Promise<any>{
     return this.db.list(`destaques/${estabelecimento.key}`).set('estabelecimento',estabelecimento);
   }
@@ -251,6 +256,9 @@ export class FireService {
     return this.db.object(`estabelecimentos/${estabelecimentoKey}/imagensAdicionais`).set(imagensAdicionais);
   }
 
+  salvarImagem(imagem:string, arquivo:any){
+
+  }
 
   salvarImagens(avatar, imagemAdicional?, imagemAdicional_2?, key?:any): Promise<any> {
     let estabelecimentoKey: string;

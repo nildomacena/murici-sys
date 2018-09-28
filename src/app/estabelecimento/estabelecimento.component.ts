@@ -243,17 +243,19 @@ export class EstabelecimentoComponent implements OnInit {
   uploadFile(event, imagem) {
     if (imagem == 'avatar')
       this.avatar = event.target.files[0];
-    else if (imagem == 'imagemAdicional')
+    else if (imagem == 'imagemAdicional') {
       this.imagemAdicional = event.target.files[0];
+      console.log(this.imagemAdicional);
+    }
     else if (imagem == 'imagemAdicional_2')
       this.imagemAdicional_2 = event.target.files[0];
   }
 
   enviarImagens() {
     console.log(this.avatar, this.imagemAdicional, this.imagemAdicional_2)
-    if(!this.avatar && !this.imagemAdicional && !this.imagemAdicional_2!)
+    if (!this.avatar && !this.imagemAdicional && !this.imagemAdicional_2!)
       alert('Nada a atualizar!');
-    else{
+    else {
       this.spinnerService.show();
       this.fire.salvarImagens(this.avatar, this.imagemAdicional, this.imagemAdicional_2, this.estabelecimentoKey ? this.estabelecimentoKey : false)
         .then(result => {
@@ -305,12 +307,19 @@ export class EstabelecimentoComponent implements OnInit {
       })
   }
 
-  colocarDestaque(){
-    if(confirm("Tem certeza que deseja tornar esse estabelecimento como destaque?"))
+  colocarDestaque() {
+    if (confirm("Tem certeza que deseja tornar esse estabelecimento como destaque?"))
       this.fire.colocarEmDestaque(this.estabelecimento)
         .then(_ => {
           this.fire.toast('Atualizado');
         })
+  }
+
+  removerDestaque() {
+    this.fire.removerDestaque(this.estabelecimento)
+      .then(_ => {
+        this.fire.toast('Atualizado');
+      })
   }
 
 }

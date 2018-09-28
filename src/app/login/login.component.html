@@ -3,36 +3,31 @@
     <h2 class="center-align">{{signup? 'Cadastrar usuário': 'Login'}}</h2>
   </div>
 </div>
+<ng4-loading-spinner [threshold]="2000" [loadingText]="'Carregando...'" [zIndex]="999"> </ng4-loading-spinner>
 <div class="row">
-  <div class="col"></div>
-  <div class="col"><ng4-loading-spinner  [threshold]="2000" [loadingText]="'Carregando...'" [zIndex]="9999"> </ng4-loading-spinner> </div>
-  <div class="col"></div>
-</div>
-
-<div class="row">
-  <form [formGroup]="form" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()" >
+  <form [formGroup]="form" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()">
     <div class="row">
       <div class="col s12 input-field">
-        <input type="text" autofocus id="email" name="email" class="validate" formControlName="email" >
+        <input type="text" autofocus id="email" name="email" class="validate" formControlName="email">
         <label for="email">Digite o email</label>
       </div>
     </div>
     <div class="row">
       <div class="col s12 input-field">
-        <input type="password" id="senha" class="validate" formControlName="senha" >
+        <input type="password" id="senha" class="validate" formControlName="senha">
         <label for="senha">Digite sua senha</label>
       </div>
     </div>
     <div class="row">
       <div class="col s6 offset-s3">
-        <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="form.invalid"  >Login</button>
+        <button type="submit" class="btn btn-waves" style="width:100%" [disabled]="form.invalid">Login</button>
         <br><br>
         <div class="center-align">
-          <a style="cursor: pointer" (click)="esqueceuSenha()">Esqueci a senha</a> 
+          <a style="cursor: pointer" (click)="esqueceuSenha()">Esqueci a senha</a>
         </div>
         <br>
         <div class="center-align">
-          <a style="cursor: pointer" (click)="solicitarAcesso()" >Solicitar acesso</a> 
+          <a style="cursor: pointer" (click)="solicitarAcesso()">Solicitar acesso</a>
         </div>
       </div>
     </div>
@@ -44,29 +39,29 @@
     <h4>Solicitar acesso</h4>
     <div class="row">
       <div class="col s3"></div>
-      <form [formGroup]="formSignup" class="col s8" (ngSubmit)="cadastrar()" >
+      <form [formGroup]="formSignup" class="col s8" (ngSubmit)="cadastrar()">
         <div class="row">
           <div class="col s12 input-field">
-            <input type="text" id="nome" name="nome" class="validate" formControlName="nome" >
+            <input type="text" id="nome" name="nome" class="validate" formControlName="nome">
             <label for="nome">Nome</label>
           </div>
         </div>
         <div class="row">
           <div class="col s12 input-field">
-            <input type="text" id="emailSignup" name="emailSignup" class="validate" formControlName="emailSignup" >
+            <input type="text" id="emailSignup" name="emailSignup" class="validate" formControlName="emailSignup">
             <label for="emailSignup">Email</label>
           </div>
         </div>
         <div class="row">
           <div class="col s12 input-field">
-            <input type="text" id="nomeEstabelecimento" name="nomeEstabelecimento" class="validate" formControlName="nomeEstabelecimento" >
+            <input type="text" id="nomeEstabelecimento" name="nomeEstabelecimento" class="validate" formControlName="nomeEstabelecimento">
             <label for="nomeEstabelecimento">Nome do estabelecimento</label>
           </div>
         </div>
-        <div class="row" *ngIf="categorias?.length > 0" >
+        <div class="row" *ngIf="categorias?.length > 0">
           <div class="col s12">
             <label>Veículo</label>
-            <select class="browser-default" formControlName="categoria" >
+            <select class="browser-default" formControlName="categoria">
               <option value="" disabled selected>Qual a categoria do estabelecimento</option>
               <option *ngFor="let categoria of categorias" [value]="categoria.key">{{categoria.nome}}</option>
             </select>
@@ -74,13 +69,13 @@
         </div>
         <div class="row">
           <div class="col s12 input-field">
-            <input type="password" id="senhaSignup" class="validate" formControlName="senhaSignup" >
+            <input type="password" id="senhaSignup" class="validate" formControlName="senhaSignup">
             <label for="senhaSignup">Digite sua senha</label>
           </div>
         </div>
         <div class="row">
           <div class="col s12 input-field">
-            <input type="password" id="confirmaSenhaSignup" class="validate" formControlName="confirmaSenhaSignup" >
+            <input type="password" id="confirmaSenhaSignup" class="validate" formControlName="confirmaSenhaSignup">
             <label for="confirmaSenhaSignup">Confirme a senha</label>
           </div>
         </div>
@@ -90,7 +85,7 @@
           </div>
         </div>
         <div class="center-align">
-          <a href="" (click)="solicitarAcesso()" >Fazer login</a> 
+          <a href="" (click)="solicitarAcesso()">Fazer login</a>
         </div>
       </form>
       <div class="col s3"></div>

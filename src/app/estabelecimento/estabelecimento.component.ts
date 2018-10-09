@@ -111,6 +111,7 @@ export class EstabelecimentoComponent implements OnInit {
                   })
                 }
                 this.estabelecimento = estabelecimento;
+                console.log(this.estabelecimento);
                 this.spinnerService.hide();
                 this.atualizaForm();
               })

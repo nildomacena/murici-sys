@@ -53,7 +53,7 @@ const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot(appRoutes),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDo1gpDFlYJzEus8c2b3aumXH8weD7YKyM'
+      apiKey: 'AIzaSyB8pu0UXs3XDxxcsc1-8Zv5PYwet5-Vm8Y'
     })
   ],
   providers: [

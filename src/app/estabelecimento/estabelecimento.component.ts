@@ -30,6 +30,12 @@ export class EstabelecimentoComponent implements OnInit {
   imagemAdicional;
   imagemAdicional_2;
 
+  ofertas: any;
+
+  nomeOferta:string;
+  precoOferta:string;
+  imagemOferta:string;
+  descricaoOferta:string;
   @ViewChild('agmMap') agmMap: AgmMap
   constructor(
     public fire: FireService,
@@ -37,6 +43,7 @@ export class EstabelecimentoComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
+
     this.form = new FormGroup({
       'nome': new FormControl('', [Validators.required]),
       'nomeResponsavel': new FormControl('', [Validators.required]),
@@ -91,7 +98,7 @@ export class EstabelecimentoComponent implements OnInit {
         this.admin = true;
         this.getEstabelecimentoByKey(params.key);
       }
-      else
+      else {
         this.fire.afAuth.authState.subscribe(user => {
           if (user) {
             this.user = user;
@@ -107,16 +114,25 @@ export class EstabelecimentoComponent implements OnInit {
                   jQuery('.chips').material_chip({
                     data: data,
                     limit: 3,
-
                   })
+                  jQuery('.chips-placeholder').material_chip({
+                    placeholder: 'Palavras-chave'
+                  });
                 }
                 this.estabelecimento = estabelecimento;
+                this.estabelecimentoKey = this.estabelecimento['key'];
+                this.fire.getOfertasPorEstabelecimento(this.estabelecimento.key)
+                  .subscribe(ofertas => {
+                    this.ofertas = this.fire.snapshotParaValue(ofertas);
+                  })
                 console.log(this.estabelecimento);
                 this.spinnerService.hide();
                 this.atualizaForm();
               })
           }
         })
+
+      }
     })
   }
 
@@ -140,6 +156,10 @@ export class EstabelecimentoComponent implements OnInit {
         this.estabelecimento = estabelecimento;
         this.spinnerService.hide();
         this.atualizaForm();
+      });
+    this.fire.getOfertasPorEstabelecimento(key)
+      .subscribe(ofertas => {
+        this.ofertas = this.fire.snapshotParaValue(ofertas);
       })
   }
 
@@ -169,15 +189,18 @@ export class EstabelecimentoComponent implements OnInit {
     jQuery('.chips').on('chip.add', (e, chip) => {
       console.log(e, chip);
       if (!this.estabelecimento.tags)
-        this.estabelecimento.tags = [];
+      this.estabelecimento.tags = [];
       this.estabelecimento.tags.push(chip.tag);
-
+      
     });
     jQuery('.chips').on('chip.delete', (e, chip) => {
       let index = this.estabelecimento.tags.indexOf(chip.tag);
       this.estabelecimento.tags.splice(index, 1);
     });
-
+    
+    jQuery('.chips-placeholder').material_chip({
+      placeholder: 'Palavras-chave'
+    });
     let horario: FormGroup = <FormGroup>this.form.controls['horario'];
     Object.keys(horario.controls).map(key => {
       let aux_control = <FormGroup>horario.controls[key];
@@ -250,6 +273,8 @@ export class EstabelecimentoComponent implements OnInit {
     }
     else if (imagem == 'imagemAdicional_2')
       this.imagemAdicional_2 = event.target.files[0];
+    else if (imagem == 'oferta')
+      this.imagemOferta = event.target.files[0];
   }
 
   enviarImagens() {
@@ -323,4 +348,31 @@ export class EstabelecimentoComponent implements OnInit {
       })
   }
 
+  submitOferta() {
+    console.log(this.estabelecimentoKey, this.nomeOferta, this.precoOferta, this.imagemOferta);
+    if (!this.imagemOferta) {
+      if (confirm('Nenhuma imagem foi selecionada. Deseja continuar mesmo assim?')) {
+        this.fire.salvarOfertaSemImagem(this.estabelecimentoKey, this.nomeOferta, this.descricaoOferta, this.precoOferta)
+          .then(_ => {
+            this.fire.toast('Oferta cadastrada.');
+          })
+      }
+    }
+    else {
+      this.fire.salvarOferta(this.estabelecimentoKey, this.nomeOferta, this.descricaoOferta, this.precoOferta, this.imagemOferta)
+        .then(_ => {
+          this.fire.toast('Oferta cadastrada.');
+        })
+    }
+  }
+  deletarOferta(oferta) {
+    if (confirm('Deseja realmente deletar essa oferta?'))
+      this.fire.deletarOferta(this.estabelecimentoKey, oferta.key)
+        .then(_ => {
+          this.fire.toast('Oferta deletada');
+        })
+  }
+  abrirModalOferta() {
+    jQuery('#modal_ofertas').modal('open');
+  }
 }

@@ -59,22 +59,22 @@ export class FireService {
       })
   }
 
-  getDestaques(){
+  getDestaques() {
     return this.db.list('destaques')
       .snapshotChanges().first().toPromise().then(snap => {
-        if(snap.length > 0)
+        if (snap.length > 0)
           return Promise.resolve(this.snapshotParaValue(snap));
-        else  
+        else
           return Promise.resolve(null);
       })
   }
 
-  removerDestaque(estabelecimento){
+  removerDestaque(estabelecimento) {
     return this.db.list(`destaques/${estabelecimento.key}`).remove();
   }
 
-  colocarEmDestaque(estabelecimento):Promise<any>{
-    return this.db.list(`destaques/${estabelecimento.key}`).set('estabelecimento',estabelecimento);
+  colocarEmDestaque(estabelecimento): Promise<any> {
+    return this.db.list(`destaques/${estabelecimento.key}`).set('estabelecimento', estabelecimento);
   }
   deletarSorteio(sorteio): Promise<void> {
     return this.storage.ref(`sorteios/${sorteio.key}`).delete().first().toPromise()
@@ -177,6 +177,8 @@ export class FireService {
       });
       return novaLista;
     }
+    else if (snapshot.length == 0)
+      return [];
     else {
       console.log(snapshot);
       let novoObjeto = {};
@@ -256,16 +258,16 @@ export class FireService {
     return this.db.object(`estabelecimentos/${estabelecimentoKey}/imagensAdicionais`).set(imagensAdicionais);
   }
 
-  salvarImagem(imagem:string, arquivo:any){
+  salvarImagem(imagem: string, arquivo: any) {
 
   }
 
-  salvarImagens(avatar, imagemAdicional?, imagemAdicional_2?, key?:any): Promise<any> {
+  salvarImagens(avatar, imagemAdicional?, imagemAdicional_2?, key?: any): Promise<any> {
     let estabelecimentoKey: string;
-    if(key)
+    if (key)
       estabelecimentoKey = key;
-    
-    else  
+
+    else
       estabelecimentoKey = this.estabelecimento.key;
     console.log(`avatar: ${avatar},imagemAdicional: ${imagemAdicional},imagemAdicional_2: ${imagemAdicional_2}`)
     let urlAvatar: string;
@@ -345,6 +347,26 @@ export class FireService {
 
   }
 
+  getOfertasPorEstabelecimento(estabelecimentoKey: string) {
+    console.log('    this.fire.getOfertas(key)    ', estabelecimentoKey);
+    return this.db.list(`ofertas/${estabelecimentoKey}`).snapshotChanges();
+  }
+
+  salvarOferta(estabelecimentoKey: string, nomeOferta: any, descricaoOferta:string, precoOferta: any, imagem: any) {
+    return this.db.list(`ofertas/${estabelecimentoKey}`).push({nome: nomeOferta, descricao:descricaoOferta, preco:precoOferta})
+      .then(value => {
+        return this.storage.ref(`ofertas/${estabelecimentoKey}/${value.key}/imagem.jpg`).put(imagem);
+      });
+  }
+
+  salvarOfertaSemImagem(estabelecimentoKey: string,  nomeOferta: any, descricaoOferta:string, precoOferta:any): ThenableReference {
+    let imagem = 'https://firebasestorage.googleapis.com/v0/b/tradegames-2dff6.appspot.com/o/assets%2Fno-photo.png?alt=media&token=518473e6-79b0-4c8b-85c8-1a129a5c7dac';
+    return this.db.list(`ofertas/${estabelecimentoKey}`).push({nome:nomeOferta, descricao:descricaoOferta, preco:precoOferta, imagem:imagem});
+  }
+
+  deletarOferta(estabelecimentoKey:string, ofertaKey:string){
+    return this.db.object(`ofertas/${estabelecimentoKey}/${ofertaKey}`).remove();
+  }
   login(user) {
     return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.senha);
   }

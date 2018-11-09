@@ -29,13 +29,14 @@ export class EstabelecimentoComponent implements OnInit {
   estabelecimentoKey: string;
   imagemAdicional;
   imagemAdicional_2;
+  loading: boolean = true;
 
   ofertas: any;
 
-  nomeOferta:string;
-  precoOferta:string;
-  imagemOferta:string;
-  descricaoOferta:string;
+  nomeOferta: string;
+  precoOferta: string;
+  imagemOferta: string;
+  descricaoOferta: string;
   @ViewChild('agmMap') agmMap: AgmMap
   constructor(
     public fire: FireService,
@@ -107,17 +108,18 @@ export class EstabelecimentoComponent implements OnInit {
                 if (estabelecimento.tags) {
                   let data: any[] = [];
                   this.tags = estabelecimento.tags;
+                  console.log('this.tags', this.tags)
                   estabelecimento.tags.map(tag => {
                     data.push({ tag: tag });
                   })
                   console.log(data);
-                  jQuery('.chips').material_chip({
-                    data: data,
-                    limit: 3,
-                  })
                   jQuery('.chips-placeholder').material_chip({
                     placeholder: 'Palavras-chave'
                   });
+                  jQuery('.chips').material_chip({
+                    data: data,
+                    limit: 5,
+                  })
                 }
                 this.estabelecimento = estabelecimento;
                 this.estabelecimentoKey = this.estabelecimento['key'];
@@ -173,11 +175,13 @@ export class EstabelecimentoComponent implements OnInit {
     this.estabelecimento.logradouro ? this.form.controls['logradouro'].setValue(this.estabelecimento.logradouro) : '';
     setTimeout(() => {
       Materialize.updateTextFields();
+      this.loading = false;
     }, 500);
   }
   ngOnInit() {
     console.log('ngOnInit');
     this.spinnerService.show();
+    this.loading = true;
     setTimeout(() => {
       jQuery('ul.tabs').tabs();
     }, 500);
@@ -189,15 +193,15 @@ export class EstabelecimentoComponent implements OnInit {
     jQuery('.chips').on('chip.add', (e, chip) => {
       console.log(e, chip);
       if (!this.estabelecimento.tags)
-      this.estabelecimento.tags = [];
+        this.estabelecimento.tags = [];
       this.estabelecimento.tags.push(chip.tag);
-      
+
     });
     jQuery('.chips').on('chip.delete', (e, chip) => {
       let index = this.estabelecimento.tags.indexOf(chip.tag);
       this.estabelecimento.tags.splice(index, 1);
     });
-    
+
     jQuery('.chips-placeholder').material_chip({
       placeholder: 'Palavras-chave'
     });
@@ -232,8 +236,10 @@ export class EstabelecimentoComponent implements OnInit {
 
   salvarEndereco() {
     this.spinnerService.show();
+    this.loading = true;
     this.fire.salvarEndereco({ lat: this.latMarker, lng: this.lngMarker })
       .then(_ => {
+        this.loading = false;
         this.spinnerService.hide();
       })
   }
@@ -283,9 +289,11 @@ export class EstabelecimentoComponent implements OnInit {
       alert('Nada a atualizar!');
     else {
       this.spinnerService.show();
+      this.loading = true;
       this.fire.salvarImagens(this.avatar, this.imagemAdicional, this.imagemAdicional_2, this.estabelecimentoKey ? this.estabelecimentoKey : false)
         .then(result => {
           this.spinnerService.hide();
+          this.loading = false;
           this.avatar = this.imagemAdicional_2 = this.imagemAdicional = null;
           if (this.user)
             this.fire.getEstabelecimentoByUid(this.user.uid)
@@ -349,28 +357,35 @@ export class EstabelecimentoComponent implements OnInit {
   }
 
   submitOferta() {
+    this.loading = true;
     console.log(this.estabelecimentoKey, this.nomeOferta, this.precoOferta, this.imagemOferta);
     if (!this.imagemOferta) {
       if (confirm('Nenhuma imagem foi selecionada. Deseja continuar mesmo assim?')) {
         this.fire.salvarOfertaSemImagem(this.estabelecimentoKey, this.nomeOferta, this.descricaoOferta, this.precoOferta)
           .then(_ => {
+            this.loading = false;
             this.fire.toast('Oferta cadastrada.');
           })
       }
     }
     else {
+      this.loading = true;
       this.fire.salvarOferta(this.estabelecimentoKey, this.nomeOferta, this.descricaoOferta, this.precoOferta, this.imagemOferta)
         .then(_ => {
+          this.loading = false;
           this.fire.toast('Oferta cadastrada.');
         })
     }
   }
   deletarOferta(oferta) {
-    if (confirm('Deseja realmente deletar essa oferta?'))
+    if (confirm('Deseja realmente deletar essa oferta?')) {
+      this.loading = true;
       this.fire.deletarOferta(this.estabelecimentoKey, oferta.key)
         .then(_ => {
+          this.loading = false;
           this.fire.toast('Oferta deletada');
         })
+    }
   }
   abrirModalOferta() {
     jQuery('#modal_ofertas').modal('open');

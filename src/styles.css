@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+.tabs .tab a{
+    color: #00bfa5;
+}
+
+.tabs .tab a:hover, .tabs .tab a.active{
+    color: #00bfa5;
+}
+
+.tabs .indicator{
+    background-color: #00bfa5;
+}

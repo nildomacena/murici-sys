@@ -23,6 +23,7 @@ export class FireService {
             this.estabelecimento = this.snapshotParaValue(result)[0];
           }));
       }
+
     })
   }
 
@@ -242,6 +243,7 @@ export class FireService {
   salvarDadosUsuário(cadastro: any) {
     return this.db.list('estabelecimentos').push({
       categoria: cadastro.categoria,
+      email:cadastro.emailSignup,
       nome: cadastro.nomeEstabelecimento,
       ativo: false,
       nomeResponsavel: cadastro.nome,

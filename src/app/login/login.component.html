@@ -3,7 +3,9 @@
     <h2 class="center-align">{{signup? 'Cadastrar usuário': 'Login'}}</h2>
   </div>
 </div>
-<ng4-loading-spinner [threshold]="2000" [loadingText]="'Carregando...'" [zIndex]="999"> </ng4-loading-spinner>
+<!--<ng4-loading-spinner [threshold]="2000" [loadingText]="'Carregando...'" [zIndex]="999"> </ng4-loading-spinner>-->
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '8px', fullScreenBackdrop:true, primaryColour: '#000000', secondaryColour: '#000000', tertiaryColour: '#000000' }"></ngx-loading>
+
 <div class="row">
   <form [formGroup]="form" class="col l4 offset-l4 m10 offset-m1 s12" (ngSubmit)="login()">
     <div class="row">

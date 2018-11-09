@@ -171,6 +171,7 @@ export class AdminComponent implements OnInit {
     this.fire.cadastrarEstabelecimento(this.formCadastro.value)
       .then(_ => {
         this.fire.toast('Estabelecimento cadastrado.');
+        this.fire.logout();
         this.formCadastro.reset();
       })
       .catch(err => {

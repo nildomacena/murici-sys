@@ -1,3 +1,5 @@
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '8px', fullScreenBackdrop:true, primaryColour: '#000000', secondaryColour: '#000000', tertiaryColour: '#000000' }"></ngx-loading>
+
 <div class="row">
   <div class="col"></div>
   <div class="col">
@@ -208,6 +210,12 @@
     <div class="input-field col s12 m6">
       <input id="precoOferta" [(ngModel)]="precoOferta" type="text" class="validate">
       <label for="precoOferta">Preço Oferta</label>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea id="descricao" [(ngModel)]="descricaoOferta" class="materialize-textarea"></textarea>
+        <label for="descricao">Descrição</label>
+      </div>
     </div>
     <div class="file-field imagem-adicional input-field col m9 s12">
       <div class="btn">

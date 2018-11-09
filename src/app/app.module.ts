@@ -8,7 +8,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database'
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
-import { LoadingModule } from 'ngx-loading';
+import { NgxLoadingModule } from 'ngx-loading';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import { AppComponent } from './app.component';
@@ -43,9 +43,9 @@ const firebaseConfig = {
   ],
   imports: [
     BrowserModule,
-    LoadingModule,
     FormsModule,
     Ng4LoadingSpinnerModule.forRoot(),
+    NgxLoadingModule.forRoot({}),
     ReactiveFormsModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,

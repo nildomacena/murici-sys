@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
     });
     this.spinnerService.show();
     setTimeout(() => {
+      this.loading = false;
       this.spinnerService.hide();
       if(this.fire.afAuth.auth.currentUser)
         this.router.navigate(['estabelecimento']);
@@ -69,6 +70,7 @@ export class LoginComponent implements OnInit {
             alert("Cadastro realizado com sucesso. Aguarde enquanto aprovamos sua conta.");
             jQuery('#modalSignup').modal('close');
             this.spinnerService.hide();
+            this.loading = false;
           })
       })
       .catch(err => {
@@ -89,14 +91,17 @@ export class LoginComponent implements OnInit {
 
   login(){
     this.spinnerService.show();
+    this.loading = true;
     this.fire.login(this.form.value)
       .then(_ => {
         this.router.navigate(['estabelecimento'])
           .then(_ =>{
+            this.loading = false;
             this.spinnerService.hide();
           })
       })
       .catch(err => {
+        this.loading = false;
         this.spinnerService.hide();
         if(err.code == 'auth/wrong-password'){
           alert('Senha incorreta. Tente novamente');
